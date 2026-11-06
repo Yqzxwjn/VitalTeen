@@ -1,0 +1,46 @@
+# 决策服务的重依赖（Laya + 推理栈）。
+#
+# **为什么单独一份，而不是并进 requirements-dev.txt。**
+# `laya[serve]` 会解析出 34 个包，其中 torch 是绝对大头 —— 装完 `.venv` 从
+# 217 MB 涨到 1.1 GB。而 `requirements-dev.txt` 是给「跑测试」用的轻量依赖
+# （pytest / pydantic / numpy）。两者混在一起，等于要求每个只想跑一次单测的人
+# 先下 1 GB。这与 `ml/requirements-train.txt` 是同一条思路：
+# **重依赖另立一份，只装在该装的机器上。**
+#
+# **版本必须写成 `==`。** Laya 开源后两周内从 0.1.1 迭代到 0.3.x，决策问题的
+# 选项字段（`options` → `criteria`）发生过破坏性变更 —— 这是开发计划风险表第 7 条。
+#
+# **下面这些是 2026-10-04 实际装上的版本，不是解析出来的版本。** 这个区别是真的：
+# 走 PyPI 解析时 `laya` 解析到 0.3.25，而走华为云镜像实际装到的是 **0.3.24** ——
+# 镜像会滞后。锁版本要锁「装上的那个」，否则这份锁文件从第一天起就是错的。
+#
+# 装法（镜像按实测选，别照抄任何人的推荐 —— 见 docs/phase0-environment.md §2.4）：
+#
+#   pip install -r server/requirements-serve.txt \
+#     -i https://mirrors.huaweicloud.com/repository/pypi/simple
+#
+# **权重不在 PyPI 上。** HuggingFace 直连实测 15 秒超时、完全不通，
+# 所以模型权重必须走 ModelScope。
+
+laya==0.3.24
+
+# 推理栈 —— 这三个是 laya 的实际计算依赖，锁住它们才锁得住行为
+torch==2.14.1+cpu
+transformers==5.18.0
+tokenizers==0.23.2
+safetensors==0.8.0
+
+# 权重获取（走 ModelScope 也用它）
+huggingface_hub==1.33.0
+
+# laya-serve 的 HTTP 层
+fastapi==0.142.2
+uvicorn==0.54.0
+python-multipart==0.0.32
+
+# `torch==2.14.1+cpu` 的 `+cpu` 是刻意的：决策层跑在笔记本的 CPU 上，
+# 不需要 CUDA。租 GPU 微调时才需要 CUDA 版 —— 那是 ml/requirements-train.txt 的事。
+#
+# 说明：这里锁的是**直接依赖**。完整的传递依赖锁需要在「只装了本文件的干净虚拟
+# 环境」里跑一次 `pip freeze` 生成 —— 本仓库的 `.venv` 同时装着开发依赖，
+# 直接 freeze 会把 pytest 之类也带进来，那份文件反而失去意义。

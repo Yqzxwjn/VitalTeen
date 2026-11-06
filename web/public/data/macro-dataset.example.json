@@ -1,0 +1,1622 @@
+{
+  "schemaVersion": "1.0",
+  "provenance": {
+    "title": "【示例数据】仅供界面预览，不是真实统计",
+    "publisher": "本仓库自造，不含任何真实统计数据",
+    "publishedYear": 2024,
+    "url": "https://example.invalid/example-only",
+    "license": "仅用于本地界面预览；禁止用于对外展示、答辩材料或任何形式的引用",
+    "coverage": "虚构的 3 个学段 × 3 个年份 × 34 个省级地区",
+    "notes": "这不是数据源。复制成 macro-dataset.json 可预览界面，但页面顶部会原样显示这份声明 —— 那是刻意的。数值由省名哈希生成，取整到两位小数或 50 的倍数，一眼能看出是占位数据。"
+  },
+  "observations": [
+    {
+      "stage": "primary-5-6",
+      "year": 2022,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.5,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2450,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "primary-5-6",
+      "year": 2023,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.52,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2500,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "primary-5-6",
+      "year": 2024,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.54,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2022,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.59,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2800,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.61,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2850,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.63,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2900,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "senior",
+      "year": 2022,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.61,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2300,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "senior",
+      "year": 2023,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.63,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2350,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "senior",
+      "year": 2024,
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.65,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2400,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "北京",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.49,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2350,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "北京",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.51,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2400,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "天津",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.7,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2450,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "天津",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.72,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2500,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "河北",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.66,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2250,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "河北",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.68,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2300,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "山西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.68,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2450,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "山西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.7,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2500,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "内蒙古",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.64,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3000,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "内蒙古",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.66,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3050,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "辽宁",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.48,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2250,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "辽宁",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.5,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2300,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "吉林",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.61,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2650,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "吉林",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.63,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2700,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "黑龙江",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.48,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2900,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "黑龙江",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.5,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2950,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "上海",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.49,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "上海",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.51,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "江苏",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.71,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2750,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "江苏",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.73,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2800,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "浙江",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.47,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2950,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "浙江",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.49,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3000,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "安徽",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.72,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "安徽",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.74,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "福建",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.71,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2750,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "福建",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.73,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2800,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "江西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.74,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2650,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "江西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.76,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2700,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "山东",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.6,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "山东",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.62,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "河南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.72,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2300,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "河南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.74,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2350,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "湖北",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.72,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "湖北",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.74,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "湖南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.51,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "湖南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.53,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2650,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "广东",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.66,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2650,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "广东",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.68,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2700,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "广西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.47,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "广西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.49,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "海南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.64,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2900,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "海南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.66,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2900,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "重庆",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.54,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2300,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "重庆",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.56,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2350,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "四川",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.62,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2750,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "四川",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.64,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2800,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "贵州",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.6,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "贵州",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.62,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "云南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.51,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2750,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "云南",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.53,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2800,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "西藏",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.69,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2250,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "西藏",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.71,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2300,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "陕西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.7,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2350,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "陕西",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.72,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2400,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "甘肃",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.46,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3000,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "甘肃",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.48,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3050,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "青海",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.53,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3050,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "青海",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.55,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 3050,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "宁夏",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.72,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2400,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "宁夏",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.74,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2450,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "新疆",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.59,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2200,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "新疆",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.61,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2250,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "台湾",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.48,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2750,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "台湾",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.5,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2800,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "香港",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.59,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2400,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "香港",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.61,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2450,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2023,
+      "region": "澳门",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.65,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2550,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    },
+    {
+      "stage": "junior",
+      "year": 2024,
+      "region": "澳门",
+      "metrics": [
+        {
+          "code": "BMI",
+          "name": "体重指数达标率",
+          "value": 0.67,
+          "unit": "ratio",
+          "kind": "rate"
+        },
+        {
+          "code": "VITAL",
+          "name": "肺活量",
+          "value": 2600,
+          "unit": "毫升",
+          "kind": "mean"
+        }
+      ]
+    }
+  ]
+}

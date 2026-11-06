@@ -1,0 +1,125 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# ---- Flutter / Dart ----
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/build/
+app/.packages
+
+# 刻意【不】忽略 app/pubspec.lock：
+# pubspec.lock 对**应用**（而非库）应当提交 —— 它锁定每个依赖的确切版本，
+# 让所有成员与构建机拿到完全相同的包。忽略它会制造「我这儿能跑」类问题，
+# 而这类问题在答辩前一天冒出来是最要命的。
+# （库不提交 lockfile 是因为它需要在依赖版本区间内保持兼容，规则相反。）
+# 同一仓库里 web/package-lock.json 也是按这个原则保留的。
+**/generated_plugin_registrant.dart
+*.g.dart
+*.freezed.dart
+
+# Android
+app/android/.gradle/
+app/android/local.properties
+app/android/key.properties
+app/android/app/debug/
+app/android/app/profile/
+app/android/app/release/
+*.jks
+*.keystore
+
+# iOS
+app/ios/Pods/
+app/ios/.symlinks/
+app/ios/Flutter/Flutter.framework
+app/ios/Flutter/Flutter.podspec
+app/ios/Flutter/Generated.xcconfig
+app/ios/Flutter/flutter_export_environment.sh
+app/ios/Runner/GeneratedPluginRegistrant.*
+
+# ---- 临场调试产物（adb screencap / logcat 落盘）----
+# 只忽略**仓库根目录**的，不碰 docs/ 下的：根目录是随手丢截图的地方，
+# 而 docs/ 里若出现 png，那是刻意放进去的验收证据，不该被这条挡住。
+# 2026-10-04 排查骨架不显示时，根目录一度堆了 10 张 skel*.png。
+/*.png
+/*.log
+
+# ---- Node / Vue ----
+node_modules/
+web/dist/
+web/.vite/
+web/*.local
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ---- 数据与模型（体积大 / 有许可约束，不进版本库）----
+ml/data/raw/
+ml/data/interim/
+ml/data/processed/
+ml/checkpoints/
+ml/**/weights/
+*.mnn
+*.onnx
+*.task
+*.tflite
+*.pt
+*.safetensors
+*.bin
+
+# ---- 大屏的外部统计数据 ----
+# macro-dataset.json 是宏观统计数据的**实际文件名**：内容来自外部公开报告，
+# 由团队在部署或演示时放入，不属于仓库。
+# 仓库里另有一份 macro-dataset.example.json（界面预览用的占位数据，出处声明里
+# 写明了它是示例）。两者同名不同源 —— 示例文件一旦被误提交成正式文件名，
+# 后来的人会以为那就是真实数据。所以这里显式排除正式文件名。
+web/public/data/macro-dataset.json
+
+# ---- 隐私：未成年人影像与关键点序列一律不落库 ----
+ml/data/privacy_sensitive/
+server/data/*.db
+server/data/*.sqlite3
+server/data/decisions/
+server/reports/*.pdf
+
+# ---- 编辑器 / 系统 ----
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- 本地配置与密钥 ----
+.env
+.env.*
+!.env.example
+*.local.yaml
+
+# ---- 参赛提交包与二进制产物（仓库只放源码与文档，不放打包件）----
+# 提交包里有 APK、视频与重复的源码副本，加起来近 250 MB，
+# 进版本库会让 clone 变得难以忍受，且它们随时可以重新打包生成。
+/健知行绎_319378/
+*.zip
+*.apk
+*.mp4
+*.docx
+/*.jpg
+/build/
+
+# ---- 软著申报副本与本地工具产物 ----
+# 软著申报目录里是与 app/ 重复的一份源码副本，外加申报用的 docx/pdf/zip；
+# 它是申报材料而不是代码本体，需要时从 app/ 重新导出即可。
+/软著申报/
+/.dsh-acl-report/
+/.dsh-*/

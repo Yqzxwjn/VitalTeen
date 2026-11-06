@@ -1,0 +1,37 @@
+[project]
+name = "vitalteen-ml"
+version = "0.1.0"
+description = "VitalTeen 数据集管线、微调与评测"
+requires-python = ">=3.11"
+
+# 刻意只依赖 numpy。
+# 温度拟合是一维优化、ECE 是分桶统计，两者的实现都不超过几十行；
+# 为此引入 scipy 或 scikit-learn 会让租用的 GPU 机器上多两个需要对齐版本的包，
+# 而 Laya 本身的版本漂移已经够麻烦了（见 ml/README.md）。
+dependencies = ["numpy>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-cov>=6.0", "ruff>=0.8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vitalteen_ml"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]

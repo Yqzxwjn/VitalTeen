@@ -1,0 +1,28 @@
+{
+  "name": "vitalteen-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "VitalTeen 数据大屏：青少年体质数据可视化（Vue3 + ECharts）",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "echarts": "^6.1.0",
+    "vue": "^3.5.43"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.2",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/test-utils": "^2.5.1",
+    "jsdom": "^30.1.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3",
+    "vue-tsc": "^3.3.12"
+  }
+}

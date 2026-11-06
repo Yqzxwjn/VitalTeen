@@ -1,0 +1,368 @@
+{
+  "_comment": [
+    "VitalTeen 矫正方案库的快照，供手机端把决策响应里的 plan_id 渲染成正文。",
+    "",
+    "由 server/tools/export_plans.py 从 app/plans.py 导出。请勿手工编辑本文件 ——",
+    "改方案请改 Python 定义后重新导出：cd server && python -m tools.export_plans",
+    "",
+    "⚠️ 全部方案都是 draft：动作与机制来自运动科学文献（有据可查），但组次剂量",
+    "尚未经体育专业成员核定。这不是遗漏，是诚实的状态 —— 一个来源不明的",
+    "「3 组 × 12 次」如果害得学生练出问题，责任是无法推脱的。",
+    "",
+    "剂量未核定时 dosage_text 就是「剂量待体育专业成员核定」，端侧必须原样显示，",
+    "不能因为它是句套话就省略 —— 省略会让用户以为这个动作没有剂量要求。"
+  ],
+  "plans": [
+    {
+      "plan_id": "COR_GLUTE_BRIDGE",
+      "name_zh": "臀桥",
+      "goal": "激活臀大肌，改善下蹲时髋主导不足、膝代偿内扣的倾向",
+      "instructions": [
+        "仰卧屈膝，双脚踩地与髋同宽，脚跟距臀部约一掌长",
+        "呼气时脚跟发力把髋抬起，直到肩-髋-膝接近一条直线",
+        "在顶点停一拍，感受臀部发力而不是腰部",
+        "控制速度落下，不要让髋砸向地面"
+      ],
+      "key_cues": [
+        "用脚跟推地",
+        "臀部发力，不要塌腰"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "腰部在动作中出现疼痛时立即停止"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "KNEE_VALGUS",
+        "PELVIC_COMPENSATION"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_CLAMSHELL",
+      "name_zh": "蚌式开合",
+      "goal": "强化髋外旋与外展肌群，减少动态膝外翻",
+      "instructions": [
+        "侧卧，双膝屈约 90 度，双脚并拢",
+        "保持骨盆不向后滚动，上侧膝盖向上打开",
+        "打开到最大幅度停一拍，再缓慢合拢",
+        "全程只有髋在动，腰部不要代偿旋转"
+      ],
+      "key_cues": [
+        "骨盆别往后倒",
+        "用臀部外侧发力"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "髋部弹响伴随疼痛时停止并咨询医生"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "KNEE_VALGUS"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_LATERAL_BAND_WALK",
+      "name_zh": "弹力带侧向行走",
+      "goal": "在负重移动中维持膝-踝对齐，把髋外展力量转化为动态控制",
+      "instructions": [
+        "弹力带套在膝上方或踝部，半蹲预备",
+        "保持膝盖对准脚尖方向，向一侧横向迈步",
+        "每一步都要控制，不要让前脚把后脚「拽」过去",
+        "往返为一组，两侧都要做"
+      ],
+      "key_cues": [
+        "膝盖对准脚尖",
+        "慢一点，别让带子把你拉回去"
+      ],
+      "equipment": [
+        "弹力带"
+      ],
+      "contraindications": [
+        "膝关节不稳或既往韧带损伤者需教师评估后使用"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "KNEE_VALGUS",
+        "ASYMMETRY"
+      ],
+      "difficulty": 2,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_WALL_SIT",
+      "name_zh": "靠墙静蹲",
+      "goal": "在无痛范围内建立屈膝位下的等长耐力与控制",
+      "instructions": [
+        "背部贴墙，双脚前移约一步，与肩同宽",
+        "沿墙下滑至膝关节约 90 度，以不痛为限",
+        "膝盖对准脚尖方向，不要内扣",
+        "保持均匀呼吸，不要憋气"
+      ],
+      "key_cues": [
+        "膝盖别超过脚尖太多",
+        "以不痛为准，不必强求九十度"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "膝前痛在静蹲中加重时立即减小角度或停止"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "INSUFFICIENT_DEPTH",
+        "TEMPO_UNCONTROLLED"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_BOX_SQUAT",
+      "name_zh": "箱式蹲（椅式蹲）",
+      "goal": "用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制",
+      "instructions": [
+        "站在椅子或矮凳前，双脚与肩同宽",
+        "臀部向后向下坐，用 3 秒慢速下蹲",
+        "臀部轻触凳面后停一拍，不要完全坐实",
+        "脚跟发力站起，全程膝盖对准脚尖"
+      ],
+      "key_cues": [
+        "慢下去，别坐实",
+        "屁股往后坐，不是往下跪"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "下蹲过程中出现膝关节疼痛时减小幅度"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "INSUFFICIENT_DEPTH",
+        "TEMPO_UNCONTROLLED",
+        "EXCESSIVE_TRUNK_LEAN"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_KNEE_TO_WALL",
+      "name_zh": "膝触墙踝背屈",
+      "goal": "改善踝背屈活动度——它是深蹲时脚跟离地与深度受限的常见根本原因",
+      "instructions": [
+        "面对墙站立，被测脚在前，脚尖距墙约一拳",
+        "保持脚跟不离地，膝盖向前推向墙面",
+        "触到墙后停一拍再退回，逐步加大脚尖与墙的距离",
+        "全程脚跟必须贴地，一旦抬起就说明超过了当前活动度"
+      ],
+      "key_cues": [
+        "脚跟不许离地",
+        "膝盖对准第二脚趾推过去"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "踝关节急性损伤期不做"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "HEEL_RISE",
+        "INSUFFICIENT_DEPTH"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_CALF_STRETCH",
+      "name_zh": "小腿三头肌拉伸",
+      "goal": "放松小腿后侧，配合踝背屈活动度改善",
+      "instructions": [
+        "面墙站立，双手扶墙，前后分腿",
+        "后腿伸直、脚跟贴地，身体缓慢前倾",
+        "再以屈膝版本拉伸比目鱼肌，同样保持脚跟贴地",
+        "每个姿势保持均匀呼吸，不弹振"
+      ],
+      "key_cues": [
+        "后脚跟踩住",
+        "不要来回弹，稳住呼吸"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "拉伸中出现小腿撕裂样疼痛立即停止"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "HEEL_RISE"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_DEAD_BUG",
+      "name_zh": "死虫式",
+      "goal": "在四肢移动时维持腰椎稳定，改善塌腰与骨盆控制",
+      "instructions": [
+        "仰卧屈髋屈膝 90 度，双臂指向上方",
+        "腰部轻压地面，全程保持这个压力",
+        "对侧手臂与腿缓慢伸出，仍能保持腰部贴地",
+        "回到起始位置，换另一侧"
+      ],
+      "key_cues": [
+        "腰别离开地面",
+        "伸出去的速度越慢越有效"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "腰部在动作中离地拱起时减小幅度"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "PU_HIP_SAG",
+        "PELVIC_COMPENSATION"
+      ],
+      "difficulty": 2,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_BIRD_DOG",
+      "name_zh": "鸟狗式",
+      "goal": "训练对侧协调与骨盆抗旋转控制",
+      "instructions": [
+        "四点跪位，手在肩下、膝在髋下",
+        "对侧手脚同时向前后伸出，保持骨盆不旋转",
+        "在末端停一拍，感受躯干稳定而不是四肢发力",
+        "缓慢收回，换另一侧"
+      ],
+      "key_cues": [
+        "骨盆不要歪",
+        "想象背上放着一杯水"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "腕关节不适时改用前臂支撑"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "ASYMMETRY",
+        "PU_HIP_SAG"
+      ],
+      "difficulty": 2,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_FRONT_PLANK",
+      "name_zh": "前平板支撑",
+      "goal": "建立躯干整体刚性，为俯卧撑与深蹲提供稳定基础",
+      "instructions": [
+        "肘部位于肩关节正下方，前臂贴地",
+        "头-肩-髋-踝尽量成一条直线",
+        "腹部与臀部同时收紧，不要塌腰也不要拱背",
+        "保持均匀呼吸，坚持到姿势开始变形就结束"
+      ],
+      "key_cues": [
+        "屁股别翘也别塌",
+        "宁可时间短，不要姿势散"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "腰部在支撑中出现疼痛时立即结束"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "PU_HIP_SAG",
+        "KNEE_VALGUS"
+      ],
+      "difficulty": 2,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_BAND_ROW",
+      "name_zh": "弹力带划船 + 肩胛后缩",
+      "goal": "强化肩胛稳定与上背力量，改善俯卧撑时肩关节代偿",
+      "instructions": [
+        "弹力带固定于胸口高度，双手握住两端",
+        "先做肩胛后缩，再屈肘把带子拉向身体",
+        "肘部沿体侧走，不要外展抬起",
+        "缓慢还原，保持肩胛控制"
+      ],
+      "key_cues": [
+        "先收肩胛再拉",
+        "肘部贴着身体走"
+      ],
+      "equipment": [
+        "弹力带"
+      ],
+      "contraindications": [
+        "肩关节疼痛或不稳时需教师评估后使用"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "PU_ELBOW_FLARE"
+      ],
+      "difficulty": 2,
+      "age_min": 12,
+      "age_max": 18
+    },
+    {
+      "plan_id": "COR_TEMPO_SQUAT",
+      "name_zh": "慢速节奏徒手深蹲",
+      "goal": "用节奏强制重建离心控制与全程对齐",
+      "instructions": [
+        "双脚与肩同宽，脚尖略外展",
+        "用 3 秒缓慢下蹲，在最低点停 1 秒",
+        "用 2 秒匀速站起，全程膝盖对准脚尖",
+        "每一次都按这个节奏，不追求次数"
+      ],
+      "key_cues": [
+        "三秒下，一秒停，两秒起",
+        "慢就是快"
+      ],
+      "equipment": [],
+      "contraindications": [
+        "下蹲中出现疼痛时减小幅度"
+      ],
+      "status": "draft",
+      "dosage_text": "剂量待体育专业成员核定",
+      "dosage_ratified": false,
+      "target_fault_codes": [
+        "TEMPO_UNCONTROLLED",
+        "INSUFFICIENT_DEPTH",
+        "EXCESSIVE_TRUNK_LEAN"
+      ],
+      "difficulty": 1,
+      "age_min": 12,
+      "age_max": 18
+    }
+  ]
+}

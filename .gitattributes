@@ -1,0 +1,38 @@
+# 换行符与文件类型策略。
+#
+# 为什么需要它：团队可能同时在 Windows 和 macOS 上开发。没有这层约定时，
+# Windows 上的编辑器默认写 CRLF、macOS 写 LF，结果是**只改了一行，diff 却显示
+# 整个文件都变了** —— 评审时看不出真正的改动，合并时到处是冲突。
+#
+# `text=auto` 的含义：仓库内一律按 LF 存储（规范化），检出时由 git 按平台决定
+# 工作区的换行符。这样仓库里的内容是干净的、跨平台一致的。
+
+* text=auto
+
+# 二进制文件不做任何换行或编码处理 —— 否则 git 会把它们当文本"规范化"，
+# 直接损坏文件内容。
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+
+# 模型与数据文件体积大且是二进制，diff 没有意义
+*.onnx binary
+*.task binary
+*.tflite binary
+*.mnn  binary
+*.pt   binary
+*.safetensors binary
+
+# 锁文件按文本处理（需要能合并），但 GitHub 上折叠显示
+package-lock.json linguist-generated=true
+
+# 这些文件的格式本身要求 LF，即使在工作区也强制 LF
+# （比如 shell 脚本若带 CRLF，在 Unix 上会因 `\r` 而执行失败）
+*.sh text eol=lf

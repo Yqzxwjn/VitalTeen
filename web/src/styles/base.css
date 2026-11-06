@@ -1,0 +1,85 @@
+/*
+ * 全局基础样式。
+ *
+ * 大屏的配色刻意偏暗：答辩现场通常投影在幕布上，浅色背景会发白、对比度崩掉，
+ * 而深色底上的亮色数据更抓得住后排评委的注意力。
+ */
+
+:root {
+  --bg: #0d1117;
+  --bg-panel: #161b22;
+  --bg-panel-hi: #1c2430;
+  --border: #2a323d;
+
+  --fg: #e6edf3;
+  --fg-muted: #8b949e;
+  --fg-dim: #6e7681;
+
+  --accent: #4cc2ff;
+  --accent-dim: #1f6feb;
+
+  --warn: #d29922;
+  --danger: #f85149;
+  --ok: #3fb950;
+
+  --radius: 10px;
+  --gap: 16px;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* 面板：大屏上所有内容都装在面板里，统一边框与内边距 */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--gap);
+}
+
+/* 提示条：用于「数据未接入」这类需要被看见的状态 */
+.notice {
+  border-left: 3px solid var(--warn);
+  background: var(--bg-panel-hi);
+  padding: 14px 16px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.notice--danger {
+  border-left-color: var(--danger);
+}
+
+.muted {
+  color: var(--fg-muted);
+}
+
+.mono {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 0.92em;
+}

@@ -1,0 +1,449 @@
+{
+  "$defs": {
+    "CandidateIn": {
+      "additionalProperties": false,
+      "description": "候选错误码。\n\n**这是一个封闭集**：决策层只能从候选里挑，不得新增候选之外的错误码。\n封闭性是「决策层不做像素级识别」这条职责边界的执行方式 ——\n如果它可以凭空发明一个错误类型，那它就不再是在做判断，而是在做检测。",
+      "properties": {
+        "code": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "triggered_by_rule": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Triggered By Rule",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "title": "CandidateIn",
+      "type": "object"
+    },
+    "DecisionContext": {
+      "additionalProperties": false,
+      "description": "谁、在什么条件下做的这组动作。\n\n年龄/性别/国标组别会影响阈值版本与方案适用性；``has_world_landmarks`` 决定\n哪些特征根本不可用 —— 它同时是决策层判断「该不该弃权」的依据。",
+      "properties": {
+        "sex": {
+          "enum": [
+            "male",
+            "female"
+          ],
+          "title": "Sex",
+          "type": "string"
+        },
+        "age": {
+          "maximum": 25,
+          "minimum": 5,
+          "title": "Age",
+          "type": "integer"
+        },
+        "grade": {
+          "maxLength": 20,
+          "minLength": 1,
+          "title": "Grade",
+          "type": "string"
+        },
+        "standard_group": {
+          "maxLength": 20,
+          "minLength": 1,
+          "title": "Standard Group",
+          "type": "string"
+        },
+        "action_code": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Action Code",
+          "type": "string"
+        },
+        "action_variant": {
+          "default": "standard",
+          "maxLength": 32,
+          "title": "Action Variant",
+          "type": "string"
+        },
+        "camera_view": {
+          "enum": [
+            "frontal",
+            "sagittal",
+            "oblique45"
+          ],
+          "title": "Camera View",
+          "type": "string"
+        },
+        "pose_backend": {
+          "enum": [
+            "mlkit",
+            "mediapipe"
+          ],
+          "title": "Pose Backend",
+          "type": "string"
+        },
+        "has_world_landmarks": {
+          "title": "Has World Landmarks",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "sex",
+        "age",
+        "grade",
+        "standard_group",
+        "action_code",
+        "camera_view",
+        "pose_backend",
+        "has_world_landmarks"
+      ],
+      "title": "DecisionContext",
+      "type": "object"
+    },
+    "DeviationIn": {
+      "additionalProperties": false,
+      "description": "一次偏离的量化描述。原样来自领域层，决策层只读不改。",
+      "properties": {
+        "feature": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Feature",
+          "type": "string"
+        },
+        "measured": {
+          "title": "Measured",
+          "type": "number"
+        },
+        "threshold": {
+          "title": "Threshold",
+          "type": "number"
+        },
+        "delta_signed": {
+          "title": "Delta Signed",
+          "type": "number"
+        },
+        "severity_0_1": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Severity 0 1"
+        }
+      },
+      "required": [
+        "feature",
+        "measured",
+        "threshold",
+        "delta_signed"
+      ],
+      "title": "DeviationIn",
+      "type": "object"
+    },
+    "FaultIn": {
+      "additionalProperties": false,
+      "description": "rep 级的一条错误判定。",
+      "properties": {
+        "code": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_frames": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Evidence Frames",
+          "type": "array"
+        },
+        "deviations": {
+          "items": {
+            "$ref": "#/$defs/DeviationIn"
+          },
+          "title": "Deviations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "code",
+        "confidence"
+      ],
+      "title": "FaultIn",
+      "type": "object"
+    },
+    "FaultStatIn": {
+      "additionalProperties": false,
+      "description": "组级统计中的一个错误码。",
+      "properties": {
+        "code": {
+          "maxLength": 48,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "reps": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Reps",
+          "type": "array"
+        },
+        "count": {
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "code",
+        "count"
+      ],
+      "title": "FaultStatIn",
+      "type": "object"
+    },
+    "PoseQuality": {
+      "additionalProperties": false,
+      "description": "姿态数据本身有多可信。用于置信度折算与弃权判断。",
+      "properties": {
+        "mean_visibility": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Mean Visibility",
+          "type": "number"
+        },
+        "coverage_ok_ratio": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Coverage Ok Ratio",
+          "type": "number"
+        },
+        "fps_mean": {
+          "exclusiveMinimum": 0.0,
+          "title": "Fps Mean",
+          "type": "number"
+        },
+        "gap_max_ms": {
+          "minimum": 0,
+          "title": "Gap Max Ms",
+          "type": "integer"
+        },
+        "view_confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "View Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "mean_visibility",
+        "coverage_ok_ratio",
+        "fps_mean",
+        "gap_max_ms",
+        "view_confidence"
+      ],
+      "title": "PoseQuality",
+      "type": "object"
+    },
+    "RepIn": {
+      "additionalProperties": false,
+      "description": "一次 rep 的完整记录。",
+      "properties": {
+        "index": {
+          "minimum": 1,
+          "title": "Index",
+          "type": "integer"
+        },
+        "duration_ms": {
+          "minimum": 0,
+          "title": "Duration Ms",
+          "type": "integer"
+        },
+        "phases_ms": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Phases Ms",
+          "type": "object"
+        },
+        "metrics": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Metrics",
+          "type": "object"
+        },
+        "faults": {
+          "items": {
+            "$ref": "#/$defs/FaultIn"
+          },
+          "title": "Faults",
+          "type": "array"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "index",
+        "duration_ms"
+      ],
+      "title": "RepIn",
+      "type": "object"
+    },
+    "SetIn": {
+      "additionalProperties": false,
+      "description": "一组动作的聚合结果。决策层真正关心的粒度就是它。",
+      "properties": {
+        "rep_count": {
+          "minimum": 0,
+          "title": "Rep Count",
+          "type": "integer"
+        },
+        "valid_rep_count": {
+          "minimum": 0,
+          "title": "Valid Rep Count",
+          "type": "integer"
+        },
+        "tempo_mean_ms": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tempo Mean Ms"
+        },
+        "rom_mean_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rom Mean Deg"
+        },
+        "symmetry_index_mean": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Symmetry Index Mean"
+        },
+        "fault_stats": {
+          "items": {
+            "$ref": "#/$defs/FaultStatIn"
+          },
+          "title": "Fault Stats",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rep_count",
+        "valid_rep_count"
+      ],
+      "title": "SetIn",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "一次决策请求。",
+  "properties": {
+    "request_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "maxLength": 16,
+      "minLength": 1,
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "context": {
+      "$ref": "#/$defs/DecisionContext"
+    },
+    "pose_quality": {
+      "$ref": "#/$defs/PoseQuality"
+    },
+    "set": {
+      "$ref": "#/$defs/SetIn"
+    },
+    "reps": {
+      "items": {
+        "$ref": "#/$defs/RepIn"
+      },
+      "title": "Reps",
+      "type": "array"
+    },
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/CandidateIn"
+      },
+      "maxItems": 20,
+      "title": "Candidates",
+      "type": "array"
+    },
+    "thresholds_version": {
+      "maxLength": 32,
+      "minLength": 1,
+      "title": "Thresholds Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_id",
+    "schema_version",
+    "context",
+    "pose_quality",
+    "set",
+    "thresholds_version"
+  ],
+  "title": "DecisionRequest",
+  "type": "object",
+  "$comment": "由 server/tools/export_schema.py 从 app/contracts.py 的 DecisionRequest 导出。请勿手工编辑本文件 —— 修改契约请改 Python 定义后重新导出。"
+}

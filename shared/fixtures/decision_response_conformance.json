@@ -1,0 +1,1955 @@
+{
+  "fixture_version": "1.0",
+  "note": "由 server/tools/build_response_fixture.py 生成。Dart 侧必须能解析 expected_response 并把字段落进报告 —— 见 app/test/app/decision_response_conformance_test.dart；并必须能用同一份 request 在本机算出逐字段相同的响应 —— 见 app/test/app/local_decision_conformance_test.dart。",
+  "decided_with": "rule-only",
+  "scenarios": [
+    {
+      "name": "ok",
+      "note": "有候选错误的规则兜底路径。请求来自 build_request_fixture 的同一条真实流水线（标定 → 状态机 → 规则引擎 → 适配器），因此 deviations 是领域层真算出来的 —— 端侧报告要 join 的就是这一份。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "INSUFFICIENT_DEPTH",
+          "name": "下蹲深度不足"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 2,
+            "severity_score": 49,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false
+        },
+        "scores": {
+          "form_score": 51,
+          "rating": "需改进",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_BOX_SQUAT",
+            "COR_KNEE_TO_WALL",
+            "COR_TEMPO_SQUAT"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制；改善踝背屈活动度——它是深蹲时脚跟离地与深度受限的常见根本原因",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_insufficient_depth_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "下蹲深度不足",
+            "primary_count": 1
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "clean",
+      "note": "没有触发任何候选错误。这是**一条有效结论**，不是数据缺失：status 为 ok、faults 为空、满分。请求只把 candidates 清空，其余原样留着一一这条路径不读 rep 数据。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": null,
+        "faults": [],
+        "gates": {},
+        "scores": {
+          "form_score": 100,
+          "rating": "优",
+          "provisional": true
+        },
+        "choice": null,
+        "message": {
+          "template_id": "msg_squat_clean_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "abstain",
+      "note": "数据质量不足，服务弃权。把关键点平均可见性压到 0.2（工程门限是 0.5）。端侧**不得**把它渲染成失败态：弃权是一条诚实的结论，不是错误。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.2,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "abstain",
+        "abstain_reason": "关键点可见性过低（0.20），画面质量不足以判断动作",
+        "primary_fault": null,
+        "faults": [],
+        "gates": {},
+        "scores": null,
+        "choice": null,
+        "message": null,
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "abstain_low_coverage",
+      "note": "【合成】质量门第二条：有效帧占比压到 0.55（门限 0.6），可见性保持达标。与 abstain 分开是必要的 —— 两条门给出**不同的弃权理由**，而那段理由是端侧直接显示给用户的原文。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.55,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "abstain",
+        "abstain_reason": "有效帧占比过低（0.55），动作序列不完整",
+        "primary_fault": null,
+        "faults": [],
+        "gates": {},
+        "scores": null,
+        "choice": null,
+        "message": null,
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "abstain_no_reps",
+      "note": "【合成】质量门第三条：一次完整动作都没记录到。请求**同时清空了 candidates**，钉住的是门的**顺序** —— 先判质量、再判有没有候选。顺序写反的实现会把这条渲染成「动作没问题，100 分」，那是把「没测到」说成了「测得好」。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 0,
+          "valid_rep_count": 0,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": []
+        },
+        "reps": [],
+        "candidates": [],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "abstain",
+        "abstain_reason": "本组未记录到任何完整动作",
+        "primary_fault": null,
+        "faults": [],
+        "gates": {},
+        "scores": null,
+        "choice": null,
+        "message": null,
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "primary_by_count",
+      "note": "【合成】主问题取**候选集内出现次数最多**的那个，而不是候选集第一项。这里候选序是 [深度不足, 膝内扣]，而命中次数是 1 : 2。同一条也钉住**faults 的顺序跟着候选集走**（不跟着 fault_stats），因为报告里「其余问题」那一段直接反映这个顺序。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            },
+            {
+              "code": "KNEE_VALGUS",
+              "reps": [
+                1,
+                2
+              ],
+              "count": 2
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "KNEE_VALGUS",
+          "name": "膝内扣"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 2,
+            "severity_score": 49,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "name": "膝内扣",
+            "severity_level": 3,
+            "severity_score": 100,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                1,
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false,
+          "KNEE_VALGUS_ok": false
+        },
+        "scores": {
+          "form_score": 10,
+          "rating": "需改进",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_BOX_SQUAT",
+            "COR_CLAMSHELL",
+            "COR_GLUTE_BRIDGE"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制；强化髋外旋与外展肌群，减少动态膝外翻",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_knee_valgus_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "膝内扣",
+            "primary_count": 2
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "primary_tie_first_stat",
+      "note": "【合成】并列时取 `fault_stats` 里的**首个**极大元素（Python `max` 的语义）。注意这里 fault_stats 的顺序与候选序**故意相反**：用 `>=` 推进的实现会取到最后一个极大元素，结果依然「是个并列项」，所以不会崩 —— 只会让断网与联网两端的报告偶尔对不上。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "KNEE_VALGUS",
+              "reps": [
+                1,
+                2
+              ],
+              "count": 2
+            },
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                1,
+                2
+              ],
+              "count": 2
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "KNEE_VALGUS",
+          "name": "膝内扣"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 2,
+            "severity_score": 49,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                1,
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "name": "膝内扣",
+            "severity_level": 3,
+            "severity_score": 100,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                1,
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false,
+          "KNEE_VALGUS_ok": false
+        },
+        "scores": {
+          "form_score": 10,
+          "rating": "需改进",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_BOX_SQUAT",
+            "COR_CLAMSHELL",
+            "COR_GLUTE_BRIDGE"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制；强化髋外旋与外展肌群，减少动态膝外翻",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_knee_valgus_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "膝内扣",
+            "primary_count": 2
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "severity_unknown_vs_zero",
+      "note": "【合成】**未知与零不是一回事。** 深度不足带一条 severity_0_1 == 0.0 的偏离（真零），脚跟离地没有任何偏离明细（未知，退回出现率）。把未知填成零的实现会给出两份一模一样的报告，而其中一份本该是「10 次里犯了 5 次」。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            },
+            {
+              "code": "HEEL_RISE",
+              "reps": [
+                1
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 2,
+            "duration_ms": 800,
+            "phases_ms": {
+              "descent": 200,
+              "bottom": 400,
+              "ascent": 200
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.592299999999994,
+                    "severity_0_1": 0.0
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          },
+          {
+            "code": "HEEL_RISE",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "INSUFFICIENT_DEPTH",
+          "name": "下蹲深度不足"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 1,
+            "severity_score": 0,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          },
+          {
+            "code": "HEEL_RISE",
+            "name": "脚跟离地",
+            "severity_level": 2,
+            "severity_score": 50,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                1
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false,
+          "HEEL_RISE_ok": false
+        },
+        "scores": {
+          "form_score": 60,
+          "rating": "及格",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_KNEE_TO_WALL",
+            "COR_BOX_SQUAT",
+            "COR_CALF_STRETCH"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：改善踝背屈活动度——它是深蹲时脚跟离地与深度受限的常见根本原因；用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_insufficient_depth_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "下蹲深度不足",
+            "primary_count": 1
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "severity_rounding",
+      "note": "【合成】0.125 与 0.375 在二进制里是**精确值**，×100 后恰好落在 12.5 与 37.5 上 ——真并列。Python 的 round 进位到偶数（12 / 38），Dart 原生的 round 远离零（13 / 38）。可见性同时取 0.90625，钉住 `round(x, 4)` 的同一个行为（0.9062，不是 0.9063）。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.90625,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                1
+              ],
+              "count": 1
+            },
+            {
+              "code": "KNEE_VALGUS",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 800,
+            "phases_ms": {
+              "descent": 200,
+              "bottom": 400,
+              "ascent": 200
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.592299999999994,
+                    "severity_0_1": 0.125
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 800,
+            "phases_ms": {
+              "descent": 200,
+              "bottom": 400,
+              "ascent": 200
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "KNEE_VALGUS",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.592299999999994,
+                    "severity_0_1": 0.375
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "INSUFFICIENT_DEPTH",
+          "name": "下蹲深度不足"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 1,
+            "severity_score": 12,
+            "confidence": 0.9062,
+            "evidence": {
+              "reps": [
+                1
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "name": "膝内扣",
+            "severity_level": 2,
+            "severity_score": 38,
+            "confidence": 0.9062,
+            "evidence": {
+              "reps": [
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false,
+          "KNEE_VALGUS_ok": false
+        },
+        "scores": {
+          "form_score": 67,
+          "rating": "及格",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_BOX_SQUAT",
+            "COR_CLAMSHELL",
+            "COR_GLUTE_BRIDGE"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制；强化髋外旋与外展肌群，减少动态膝外翻",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_insufficient_depth_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "下蹲深度不足",
+            "primary_count": 1
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "stats_disjoint",
+      "note": "【合成】`fault_stats` 与 `candidates` **完全不相交**（这是端侧只升级了一半时会出现的形状）。主问题退回候选集首项以保证契约成立（primary_fault 必须出现在faults 里），证据则如实为空 —— 不是编一个。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "HEEL_RISE",
+              "reps": [
+                1
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "INSUFFICIENT_DEPTH",
+          "name": "下蹲深度不足"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 2,
+            "severity_score": 49,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [],
+              "metric": null,
+              "mean_deviation": null
+            }
+          },
+          {
+            "code": "KNEE_VALGUS",
+            "name": "膝内扣",
+            "severity_level": 1,
+            "severity_score": 0,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false,
+          "KNEE_VALGUS_ok": false
+        },
+        "scores": {
+          "form_score": 61,
+          "rating": "及格",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_BOX_SQUAT",
+            "COR_CLAMSHELL",
+            "COR_GLUTE_BRIDGE"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制；强化髋外旋与外展肌群，减少动态膝外翻",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_insufficient_depth_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "下蹲深度不足"
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "no_reps_thin",
+      "note": "【合成】`reps` 为空但组级统计在 —— 端侧只上报聚合结果时会是这样。严重度退回**出现率**（「2 次里犯 2 次」），而不是当作零。这是可以接受的近似：它用的是真实上报的数据，只是换了维度。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                1,
+                2
+              ],
+              "count": 2
+            }
+          ]
+        },
+        "reps": [],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "INSUFFICIENT_DEPTH",
+          "name": "下蹲深度不足"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 3,
+            "severity_score": 100,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                1,
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false
+        },
+        "scores": {
+          "form_score": 0,
+          "rating": "需改进",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_BOX_SQUAT",
+            "COR_KNEE_TO_WALL",
+            "COR_TEMPO_SQUAT"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：用触凳给深度一个明确的目标，重建下蹲的动作模式与离心控制；改善踝背屈活动度——它是深蹲时脚跟离地与深度受限的常见根本原因",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_insufficient_depth_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "下蹲深度不足",
+            "primary_count": 2
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "plans_equipment",
+      "note": "【合成】器材过滤 + 覆盖数优先排序。候选 [膝内扣, 左右不对称]，用户手上有弹力带。覆盖 2 个码的弹力带侧向行走排第一（尽管它难度 2），后面才轮到覆盖 1 个码的。没有这条，端侧的器材子集判断错了也没人知道。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 16,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "KNEE_VALGUS",
+              "reps": [
+                1,
+                2
+              ],
+              "count": 2
+            },
+            {
+              "code": "ASYMMETRY",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "KNEE_VALGUS",
+            "triggered_by_rule": "rule_engine"
+          },
+          {
+            "code": "ASYMMETRY",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "available_equipment": [
+        "弹力带"
+      ],
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "KNEE_VALGUS",
+          "name": "膝内扣"
+        },
+        "faults": [
+          {
+            "code": "KNEE_VALGUS",
+            "name": "膝内扣",
+            "severity_level": 3,
+            "severity_score": 100,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                1,
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          },
+          {
+            "code": "ASYMMETRY",
+            "name": "左右不对称",
+            "severity_level": 2,
+            "severity_score": 50,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "KNEE_VALGUS_ok": false,
+          "ASYMMETRY_ok": false
+        },
+        "scores": {
+          "form_score": 10,
+          "rating": "需改进",
+          "provisional": true
+        },
+        "choice": {
+          "selected_plan_ids": [
+            "COR_LATERAL_BAND_WALK",
+            "COR_CLAMSHELL",
+            "COR_GLUTE_BRIDGE"
+          ],
+          "selection_reason": "（方案未核定，仅供参考）以覆盖当前主要问题为优先：在负重移动中维持膝-踝对齐，把髋外展力量转化为动态控制；强化髋外旋与外展肌群，减少动态膝外翻",
+          "dose_note": "本建议由规则引擎按覆盖面排序产出（决策模型当时不可用）；剂量待体育专业成员核定。"
+        },
+        "message": {
+          "template_id": "msg_squat_knee_valgus_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "膝内扣",
+            "primary_count": 2
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    },
+    {
+      "name": "plans_age_filter",
+      "note": "【合成】年龄过滤。年龄压到 11 —— 内置方案库全部是 12–18 岁，因此一条方案都选不出来。这条同时锁住「有错误但没有建议」这个组合的渲染：`choice` 为 null 而 faults 非空，报告不能因此留白或崩掉。",
+      "request": {
+        "request_id": "conformance-1",
+        "schema_version": "1.0",
+        "context": {
+          "sex": "female",
+          "age": 11,
+          "grade": "高一",
+          "standard_group": "高中女子",
+          "action_code": "SQUAT",
+          "action_variant": "standard",
+          "camera_view": "oblique45",
+          "pose_backend": "mlkit",
+          "has_world_landmarks": false
+        },
+        "pose_quality": {
+          "mean_visibility": 0.94,
+          "coverage_ok_ratio": 0.98,
+          "fps_mean": 29.7,
+          "gap_max_ms": 66,
+          "view_confidence": 0.91
+        },
+        "set": {
+          "rep_count": 2,
+          "valid_rep_count": 2,
+          "tempo_mean_ms": 825.0,
+          "rom_mean_deg": null,
+          "symmetry_index_mean": null,
+          "fault_stats": [
+            {
+              "code": "INSUFFICIENT_DEPTH",
+              "reps": [
+                2
+              ],
+              "count": 1
+            }
+          ]
+        },
+        "reps": [
+          {
+            "index": 1,
+            "duration_ms": 858,
+            "phases_ms": {
+              "descent": 165,
+              "bottom": 429,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [],
+            "confidence": null
+          },
+          {
+            "index": 2,
+            "duration_ms": 792,
+            "phases_ms": {
+              "descent": 198,
+              "bottom": 330,
+              "ascent": 165
+            },
+            "metrics": {},
+            "faults": [
+              {
+                "code": "INSUFFICIENT_DEPTH",
+                "confidence": 1.0,
+                "evidence_frames": [
+                  3706,
+                  3739,
+                  3772,
+                  3805,
+                  3838,
+                  3871,
+                  3904,
+                  3937,
+                  3970,
+                  4003,
+                  4036
+                ],
+                "deviations": [
+                  {
+                    "feature": "knee_angle_L",
+                    "measured": 119.5923,
+                    "threshold": 100.0,
+                    "delta_signed": 19.5923,
+                    "severity_0_1": 0.4898
+                  }
+                ]
+              }
+            ],
+            "confidence": null
+          }
+        ],
+        "candidates": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "triggered_by_rule": "rule_engine"
+          }
+        ],
+        "thresholds_version": "conformance-1"
+      },
+      "expected_response": {
+        "request_id": "conformance-1",
+        "status": "ok",
+        "abstain_reason": null,
+        "primary_fault": {
+          "code": "INSUFFICIENT_DEPTH",
+          "name": "下蹲深度不足"
+        },
+        "faults": [
+          {
+            "code": "INSUFFICIENT_DEPTH",
+            "name": "下蹲深度不足",
+            "severity_level": 2,
+            "severity_score": 49,
+            "confidence": 0.94,
+            "evidence": {
+              "reps": [
+                2
+              ],
+              "metric": null,
+              "mean_deviation": null
+            }
+          }
+        ],
+        "gates": {
+          "INSUFFICIENT_DEPTH_ok": false
+        },
+        "scores": {
+          "form_score": 51,
+          "rating": "需改进",
+          "provisional": true
+        },
+        "choice": null,
+        "message": {
+          "template_id": "msg_squat_insufficient_depth_teen_v1",
+          "params": {
+            "total": 2,
+            "valid": 2,
+            "primary": "下蹲深度不足",
+            "primary_count": 1
+          }
+        },
+        "meta": {
+          "decision_model_version": "rule-only",
+          "thresholds_version": "conformance-1",
+          "latency_ms": 0,
+          "shuffled": false,
+          "shuffle_seed": null
+        }
+      }
+    }
+  ]
+}

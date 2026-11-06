@@ -1,0 +1,985 @@
+/// Phase 0 技术验证探针：**真机实时推理帧率**。
+///
+/// 这是一个一次性的验证工具，不是产品代码。但它要回答的是整个技术路线成不成立的
+/// 问题：如果目标机器上的推理帧率到不了 15 FPS，Flutter + ML Kit 这条路线就得改
+/// （降到 480p / 换 lite 模型 / 退回原生 Android + MediaPipe Task）。而这件事必须
+/// 在第 1 周就知道，不能拖到第 10 周。
+///
+/// ## 运行
+///
+/// ```
+/// flutter run --release -t lib/phase0/fps_probe.dart -d <设备ID>
+/// ```
+///
+/// **必须用 `--release`。** debug 构建下 Dart 侧的解释执行与断言会让帧率低到
+/// 毫无参考价值 —— 拿 debug 的数字判断技术路线，会得出错误结论，而且是往
+/// 保守方向错，可能白白放弃一条本来可行的路线。
+///
+/// 屏幕保持常亮（本探针没引入 wakelock 依赖），并把系统休眠时间调长。
+///
+/// ## 三个必须分开看的数字
+///
+/// - **取帧率**：相机回调被调用的频率。这是相机的上限，不是我们的能力。
+/// - **推理帧率**：真正完成一次姿态检测的频率。**验收看的是这个。**
+/// - **丢帧率**：因为上一次推理还没结束而被丢弃的帧的占比。
+///   它高不一定是坏事 —— 说明我们在「只保最新帧」，而不是排队积压。
+///
+/// 把取帧率和推理帧率混为一谈是这一步最常见的误读：相机跑 30fps 而推理只有 8fps
+/// 时，如果只看相机回调，会以为一切正常。
+///
+/// 控制台每秒打一行汇总（`[probe] ...`），可直接复制进验收记录 ——
+/// 开发计划要求的是「连续运行 5 分钟的帧率衰减曲线」，而衰减看的就是这串数字。
+///
+/// ## 前置摄像头（2026-10-04 起为默认）
+///
+/// 产品要求用户能一边做动作一边看屏幕，所以默认用前置。但**换镜头同时换了机位**：
+/// 前摄朝向用户 = 正视，后摄架在侧面 = 侧视。两者能判的故障不同 ——
+/// 侧视才判得了脚跟离地，正视才判得了膝内扣（见 `domain/features.dart` 的
+/// `CameraView` 与 `domain/exercises/squat.dart` 的规则表）。所以日志行里带了
+/// `lens=`，帧率数据必须自述它是哪个机位测出来的。
+///
+/// 探针从 2026-10-04 起也画骨架（[SkeletonPainter]），所以镜像不再是无关项。
+/// 两条结论，一条读源码、一条真机定案：
+///
+/// 1. **喂给 ML Kit 的那块缓冲没有镜像 —— 已读源码确认（2026-10-04）。**
+///    `camera_android` 的 `ImageStreamReader.onImageAvailable` 把 Camera2 的平面
+///    字节原样搬进 event channel，图像流这条路径上没有任何水平翻转；插件里唯一
+///    与「前摄」相关的补偿是 `DeviceOrientationManager.getVideoOrientation` 里的
+///    `angle *= -1`，而那管的是视频/预览的**旋转**，不是图像流的方向。
+///
+///    这条值钱的地方在于：**如果原始缓冲被镜像了，`leftKnee`/`rightKnee` 会互换，
+///    膝内扣与左右不对称就会整体判反，而画面看起来一切正常** —— 属于最难发现的
+///    那一类错误。现在它可以当作已验证的前提使用；要推翻它，得先证明设备 HAL
+///    在输出端就翻了，而不是「保险起见再测一次」。
+///
+/// 2. **前摄预览是镜像的 —— 真机定案（2026-10-04）。** 于是覆盖层与预览之间
+///    差了 y 轴的一次翻转：`mirror` 关掉时骨架整体偏到人脸左侧（脸正好落在
+///    `1 - x` 的位置），打开后肩对肩、髋对髋、膝对膝精确压合。
+///
+///    **翻转必须发生在绘制层，绝不能翻进领域层** —— `leftKnee` 的解剖学含义
+///    与画面左右无关，翻进去会让膝内扣、左右不对称这些判定整体反向。
+///    所以 [_mirror] 跟着镜头走（前摄翻、后摄不翻），而不是跟着用户的开关走。
+///
+/// ## 5 分钟压测与提示音（2026-10-04 加）
+///
+/// 压测时用户站在镜头前、背对着屏幕，**既看不到倒计时，也不知道什么时候跑完**。
+/// 所以 AppBar 上的计时器按钮会起一个 5 分钟倒计时，到点由平台侧响一声
+/// （[MainActivity] 的 `alarm`，唯一的一处原生代码）。
+///
+/// **提示音走 Android 的闹钟音量流，不是媒体流。** 媒体音量是最容易被随手调到 0
+/// 的那条流（看完视频就调低了），而压测最贵的失败方式是「跑满五分钟但用户
+/// 不知道结束了」—— 那五分钟得重跑。三级回退与理由见 `MainActivity.kt`。
+///
+/// **压测前先点一次 AppBar 的音量图标试听。** 提示音是这条链路里唯一
+/// 「弄错了要等五分钟才发现」的环节：音量流、设备有没有闹钟铃声、勿扰放不放行，
+/// 都只能靠耳朵验，而这三件事在用户退到两米外之后就没法验了。
+library;
+
+import 'dart:async';
+
+import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+
+import '../domain/pose.dart';
+import '../platform/mlkit_pose_mapper.dart';
+import '../ui/skeleton_overlay.dart';
+
+/// 统计窗口。3 秒足够长到平滑，又短到能看出衰减。
+const int _windowMs = 3000;
+
+/// 关键点计为「可见」的门槛，与 `TrackingConfig.visibilityThreshold` 保持一致。
+const double _visibilityThreshold = 0.5;
+
+/// 异常文本压成单行短串，供每秒一行的统计使用。
+///
+/// **为什么把「原因」也塞进每一行：** `_errorCount` 只说明失败了多少次，
+/// 不说明为什么失败。而事后翻日志的人只看统计行 —— 第一版把异常原文只打前 3 次，
+/// 结果一次 `head` / `tail` 的取舍就把它们全丢了，白跑一整轮排查。
+///
+/// 「只打前几次」这个设计隐含假设了「你从 t=0 就在看日志」，
+/// 而这恰恰不成立于后台抓取与前缀截断。**每个失败计数都要能和它的原因一起被看到。**
+String _shortError(String message) {
+  final oneLine = message.replaceAll(RegExp(r'\s+'), ' ').trim();
+  return oneLine.length <= 70 ? oneLine : '${oneLine.substring(0, 70)}…';
+}
+
+/// 四个脚部关键点（左右脚跟、左右脚尖）是否都可见。
+///
+/// 少了它们，深蹲的「脚跟离地」与立定跳远的起跳判定都做不了 ——
+/// 所以这四个点不是「多出来的两个点」，而是本项目的立论基础之一。
+bool _allFootPointsVisible(Pose pose, double threshold) {
+  const footPoints = [
+    PoseLandmarkType.leftHeel,
+    PoseLandmarkType.rightHeel,
+    PoseLandmarkType.leftFootIndex,
+    PoseLandmarkType.rightFootIndex,
+  ];
+  for (final type in footPoints) {
+    final landmark = pose.landmarks[type];
+    if (landmark == null || landmark.likelihood < threshold) return false;
+  }
+  return true;
+}
+
+/// 首帧延迟要单独看：它是一次性的，混进平均耗时里会把数字掩盖掉。
+void main() {
+  runApp(const _ProbeApp());
+}
+
+class _ProbeApp extends StatelessWidget {
+  const _ProbeApp();
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'VitalTeen Phase 0 · 帧率探针',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(colorSchemeSeed: Colors.teal, useMaterial3: true),
+        home: const _ProbePage(),
+      );
+}
+
+class _ProbePage extends StatefulWidget {
+  const _ProbePage();
+
+  @override
+  State<_ProbePage> createState() => _ProbePageState();
+}
+
+class _ProbePageState extends State<_ProbePage> {
+  final Stopwatch _clock = Stopwatch();
+  final List<int> _frameTimes = []; // 取帧回调到达时刻
+  final List<int> _inferEnds = []; // 推理完成时刻
+  final List<int> _inferCosts = []; // 推理耗时（毫秒）
+
+  CameraController? _controller;
+  PoseDetector? _detector;
+  InputImageRotation? _rotation;
+
+  ResolutionPreset _preset = ResolutionPreset.medium;
+
+  /// 当前使用的摄像头。**默认前置。**
+  ///
+  /// 产品形态要求用户能一边做动作一边看屏幕：后置机位下用户看不见反馈，
+  /// 等于把交互整个砍掉。这是 2026-10-04 用户提出的问题，不是工程偏好。
+  ///
+  /// **但换摄像头不只是换镜头。** 前摄朝向用户 = 正视机位，后摄架在侧面 = 侧视机位，
+  /// 而这两者能判的故障完全不同（见 `domain/features.dart` 的 `CameraView`
+  /// 与 `domain/exercises/squat.dart` 的规则表）。所以探针必须把镜头方向打进
+  /// 每一行日志：**帧率数字必须自述「这是哪个机位测出来的」** ——
+  /// 前后两次测量在日志里长得一模一样，却不可比。
+  CameraLensDirection _lens = CameraLensDirection.front;
+
+  String? _fatal;
+  String? _lastError;
+
+  int _framesSeen = 0;
+  int _framesDropped = 0;
+  int _inferences = 0;
+  int _hitPoses = 0; // 推理里至少检出一个人
+  int _visibleSum = 0; // 可见点总数，除以 _inferences 得均值
+  int _formatFailures = 0;
+  int _errorCount = 0;
+
+  /// 第一帧实际拿到的格式与平面数。
+  ///
+  /// **这两个值是排查取帧问题的第一手证据。** 插件不一定会理会请求的
+  /// `ImageFormatGroup.nv21` —— 例如 `camera_android_camerax` 就可能始终给
+  /// yuv420（3 个平面）。而不同格式要交给 ML Kit 的字节布局完全不同：
+  /// 只把几个平面首尾相接，对 nv21 是对的，对 yuv420 就不是。
+  ///
+  /// 把「实际拿到了什么」和「我们按什么解析」分开记录，才不会在这类问题上
+  /// 来回猜。
+  int? _observedRawFormat;
+  int? _observedPlaneCount;
+
+  /// 相机的传感器朝向。竖持时后摄通常是 90、**前摄通常是 270**。
+  ///
+  /// 它必须来自相机本身而不是猜出来的：这个值决定 ML Kit 把图像转正还要顺时针
+  /// 转多少度，填错的表现是骨架整体躺倒或偏 90 度。前摄与后摄不同，
+  /// 所以换镜头时这个值会变 —— 单独记下来，出问题时一眼能看出是不是它。
+  int? _sensorOrientation;
+
+  /// 检出到姿态的次数，以及其中**四个脚部关键点都可见**的次数。
+  ///
+  /// 这是 Phase 0 验收标准里单列的一条（「33 个关键点全部输出，含脚跟 29/30、
+  /// 脚尖 31/32」），必须单独统计 —— 平均可见点数看不出这一条：
+  /// 32 个点里少两个照样是 32。而整个项目「按 33 点而不是 COCO 17 点设计」
+  /// 的论证，全压在这四个点上。
+  int _poseFrames = 0;
+  int _footPointsFrames = 0;
+
+  bool _busy = false;
+  int? _streamStartedMs;
+  int? _firstDetectionMs;
+  int _lastLogMs = 0;
+
+  /// 出比例读数所需的最小样本量（约 1.5 秒推理）。
+  ///
+  /// **低于它只报原始计数，不报百分比。** 2026-10-04 的一次读数里，
+  /// 「四个脚部点齐全的比例」显示 `100 %（31/31）`，而同一张表上
+  /// 「平均可见关键点」只有 2.8 —— 画面里根本没有人，那 31 帧是人在画框边缘
+  /// 凑出来的，100% 纯属噪声。
+  ///
+  /// 这类读数的危险不在于算错，而在于**百分比形式会让读者默认它是个结论**，
+  /// 而 `31/31` 摆出来就不会 —— 分母会自己说话。所以样本不足时退回原始计数。
+  static const int _minSample = 30;
+
+  /// 最新一帧姿态，供骨架叠加层绘制。
+  ///
+  /// 用 [ValueNotifier] 而不是普通字段 + `setState`：骨架要按推理帧率（~20fps）刷新，
+  /// 而 `setState` 每次都会重建整棵控件树。把重绘绑到 `CustomPainter` 的 `repaint`
+  /// 上，重建就被限制在骨架内部 —— **测量工具不能因为自己的显示开销把被测的帧率压下来**。
+  final ValueNotifier<PoseFrame?> _latestPose = ValueNotifier<PoseFrame?>(null);
+
+  bool _showSkeleton = true;
+
+  // ---- 5 分钟压测倒计时与提示音 ----
+
+  /// 压测时长。开发计划要求的是「连续运行 5 分钟」的帧率衰减曲线。
+  static const int _stressDurationMs = 5 * 60 * 1000;
+
+  /// 压测开始时刻（[_clock] 的毫秒）。`null` 表示没在跑。
+  int? _stressStartMs;
+
+  /// 本轮是否已经响过。**没有它，倒计时每秒都会重放一次铃声。**
+  bool _alarmFired = false;
+
+  Timer? _ticker;
+
+  /// 倒计时文本。
+  ///
+  /// **用 [ValueNotifier] 而不是 `setState`：** 这个倒计时每秒更新一次，
+  /// 而 `setState` 会重建整棵控件树 —— 相机预览每秒抖一下。
+  /// 探针的全部价值就是它报的帧率是真的，**不能让自己的界面开销去污染被测数字**。
+  /// 这与骨架走 `CustomPainter(repaint:)` 是同一条理由。
+  final ValueNotifier<String> _countdown = ValueNotifier<String>('未开始');
+
+  /// 提示音通道。平台侧实现在 `MainActivity.kt` —— 探针唯一的原生代码。
+  static const MethodChannel _alarmChannel = MethodChannel('vitalteen/probe');
+
+  /// 响提示音。[seconds] 秒后平台侧自动停（用户看不到屏幕，够不到停止按钮）。
+  Future<void> _playAlarm({int seconds = 10}) async {
+    try {
+      await _alarmChannel.invokeMethod<void>('alarm', {'seconds': seconds});
+    } on MissingPluginException {
+      // 平台侧没接上（例如只热重载了 Dart）。**必须吞掉** ——
+      // 提示音是「锦上添花」的功能，让它把已经跑完的压测搞崩是最坏的结果。
+      debugPrint('[probe] 提示音通道不可用：平台侧未注册');
+    } on PlatformException catch (error) {
+      debugPrint('[probe] 提示音失败：${error.code} ${error.message}');
+    }
+  }
+
+  /// 骨架是否水平翻转。**默认翻** —— 前摄预览是镜像的，而喂给 ML Kit 的
+  /// 原始缓冲不是（读 `camera_android` 源码确认过），两边不一致，
+  /// 覆盖层必须翻一次才能压在身体上。
+  ///
+  /// 这不是一个偏好设置：**翻转要跟着镜头走**，见 [_boot] 里选完相机后的赋值。
+  /// 留着这个手动开关只是为了让「镜像到底对不对」能在真机上**一眼定案**，
+  /// 而不是靠推理 —— 2026-10-04 就是靠它定案的。
+  bool _mirror = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _clock.start();
+    // 倒计时用独立的 [Timer] 而不是搭在推理循环上：**推理一旦停住
+    //（相机断了、人走了、模型失败），搭在它上面的计时器也会跟着停**，
+    // 而那正是最需要提醒用户「这轮白跑了」的时刻。
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
+    _boot();
+  }
+
+  @override
+  void dispose() {
+    _teardown();
+    _ticker?.cancel();
+    _countdown.dispose();
+    _latestPose.dispose();
+    _clock.stop();
+    super.dispose();
+  }
+
+  /// 压测计时的每秒一跳：更新倒计时，到点响提示音。
+  void _tick() {
+    final start = _stressStartMs;
+    if (start == null) {
+      _countdown.value = '未开始';
+      return;
+    }
+
+    final left = _stressDurationMs - (_clock.elapsedMilliseconds - start);
+    if (left > 0) {
+      final d = Duration(milliseconds: left);
+      _countdown.value =
+          '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}';
+      return;
+    }
+
+    _countdown.value = '完成';
+    if (_alarmFired) return;
+    _alarmFired = true;
+    debugPrint('[probe] 5 分钟压测到点，响提示音');
+    _playAlarm();
+  }
+
+  /// 开始 / 停止 5 分钟压测。
+  ///
+  /// 开始时顺带 `_resetCounters()`：**验收要的是「从干净的零起算的 5 分钟」**，
+  /// 而不是把之前调试时的几百帧混进分子里 —— 那会让衰减曲线看不出衰减。
+  void _toggleStress() {
+    final running = _stressStartMs != null;
+    if (running) {
+      setState(() {
+        _stressStartMs = null;
+        _alarmFired = false;
+      });
+      _countdown.value = '未开始';
+      return;
+    }
+
+    _resetCounters();
+    setState(() {
+      _stressStartMs = _clock.elapsedMilliseconds;
+      _alarmFired = false;
+    });
+    _countdown.value = '5:00';
+    debugPrint('[probe] 5 分钟压测开始');
+  }
+
+  Future<void> _teardown() async {
+    final controller = _controller;
+    _controller = null;
+    try {
+      if (controller != null) {
+        if (controller.value.isStreamingImages) {
+          await controller.stopImageStream();
+        }
+        await controller.dispose();
+      }
+    } catch (_) {
+      // 卸载路径上的异常没有意义，吞掉即可。
+    }
+    await _detector?.close();
+    _detector = null;
+  }
+
+  Future<void> _boot() async {
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        setState(() => _fatal = '这台设备没有可用相机');
+        return;
+      }
+      // 按 [_lens] 选，选不到就退到任意一台 —— 有些设备的前摄在
+      // `availableCameras()` 里不出现（例如被系统策略禁用），
+      // 那种情况下硬失败不如拿一台能用的继续测，并在界面上说明。
+      final camera = cameras.firstWhere(
+        (c) => c.lensDirection == _lens,
+        orElse: () => cameras.first,
+      );
+
+      // 关键点索引对齐检查。在拿到第一帧之前做 —— 错位不会报错，
+      // 只会让所有角度特征系统性偏一点，从现象几乎反推不到病因。
+      final problems = landmarkAlignmentProblems();
+      if (problems.isNotEmpty) {
+        setState(() => _fatal = 'ML Kit 关键点与本项目枚举不对齐：\n${problems.join('\n')}');
+        return;
+      }
+
+      final controller = CameraController(
+        camera,
+        _preset,
+        enableAudio: false,
+        // NV21 是 Android 上最省一次转换的格式。iOS 要用 bgra8888 ——
+        // 格式传错不会警告，只会黑屏或直接抛错。
+        imageFormatGroup: ImageFormatGroup.nv21,
+      );
+      await controller.initialize();
+      if (!mounted) {
+        await controller.dispose();
+        return;
+      }
+
+      // ML Kit 需要「把图像转正还需顺时针转多少度」，而 sensorOrientation
+      // 的定义正是这个。竖持后摄通常是 90、前摄通常是 270 —— 直接读相机上报的值，
+      // 不要按镜头方向猜。
+      final rotation = InputImageRotationValue.fromRawValue(camera.sensorOrientation);
+      if (rotation == null) {
+        setState(() => _fatal = '无法识别的相机朝向：${camera.sensorOrientation}');
+        await controller.dispose();
+        return;
+      }
+
+      final detector = PoseDetector(
+        options: PoseDetectorOptions(
+          // base 是流式模型，accurate 是给静态图的。相机流必须用 base，
+          // 而且 stream 模式会跨帧跟踪，单帧抖动小得多。
+          model: PoseDetectionModel.base,
+          mode: PoseDetectionMode.stream,
+        ),
+      );
+
+      setState(() {
+        _controller = controller;
+        _detector = detector;
+        _rotation = rotation;
+        _lens = camera.lensDirection; // 回填：选不到目标镜头时这里会与请求值不同
+        _sensorOrientation = camera.sensorOrientation;
+        // 镜像跟着镜头走，不跟着用户的开关走。前摄预览是镜像的、后摄不是，
+        // 而两个镜头喂给 ML Kit 的缓冲都不镜像 —— 所以「该不该翻」是镜头的
+        // 属性，不是偏好。切换镜头时重新赋一次，否则换成后摄后骨架会反着压。
+        _mirror = camera.lensDirection == CameraLensDirection.front;
+      });
+
+      await controller.startImageStream(_onFrame);
+      _streamStartedMs = _clock.elapsedMilliseconds;
+    } on CameraException catch (error) {
+      setState(() => _fatal = '相机初始化失败：${error.code}\n${error.description}');
+    } catch (error) {
+      setState(() => _fatal = '$error');
+    }
+  }
+
+  void _onFrame(CameraImage image) {
+    final now = _clock.elapsedMilliseconds;
+    _framesSeen++;
+    _frameTimes.add(now);
+
+    if (_observedRawFormat == null) {
+      final raw = image.format.raw;
+      _observedRawFormat = raw is int ? raw : -1;
+      _observedPlaneCount = image.planes.length;
+    }
+
+    // **只保最新帧。** 推理比取帧慢是常态；把积压的帧排队处理，只会让延迟
+    // 无限增长、内存被吃满，而且测出来的「帧率」是过去的吞吐，毫无意义。
+    // 丢掉旧帧换取实时性，是这类应用唯一正确的取舍。
+    if (_busy) {
+      _framesDropped++;
+      return;
+    }
+    _busy = true;
+    _run(image).whenComplete(() => _busy = false);
+  }
+
+  Future<void> _run(CameraImage image) async {
+    final detector = _detector;
+    final rotation = _rotation;
+    if (detector == null || rotation == null) return;
+
+    final started = _clock.elapsedMilliseconds;
+    try {
+      final input = _toInputImage(image, rotation);
+      if (input == null) {
+        _formatFailures++;
+        return;
+      }
+
+      final poses = await detector.processImage(input);
+      final ended = _clock.elapsedMilliseconds;
+
+      _inferences++;
+      _inferEnds.add(ended);
+      _inferCosts.add(ended - started);
+
+      if (poses.isNotEmpty) {
+        _hitPoses++;
+        // 多人入镜时取第一个。生产环境应改取画面中最大的那个 ——
+        // 探针只需知道「检测到人了没有」。
+        _visibleSum += visibleLandmarkCount(
+          poses.first,
+          threshold: _visibilityThreshold,
+        );
+        _poseFrames++;
+        if (_allFootPointsVisible(poses.first, _visibilityThreshold)) {
+          _footPointsFrames++;
+        }
+
+        // 骨架叠加层吃这一份。**刻意走 `poseFrameFromMlKit` 而不是自己再映射一遍**：
+        // 那是本项目唯一的「ML Kit → 领域类型」转换点，复用它等于顺带把这个映射
+        // 放进真机路径里跑一遍 —— 索引对错了，画面上立刻能看出来，
+        // 而单纯看数字是看不出来的。
+        _latestPose.value = poseFrameFromMlKit(
+          poses.first,
+          imageWidth: image.width,
+          imageHeight: image.height,
+          rotation: rotation,
+          timestampMs: ended,
+        );
+      } else {
+        // 人离开画面必须清掉，否则骨架僵在最后一帧上，
+        // 看起来像「还在追踪」，实际早就不动了。
+        _latestPose.value = null;
+      }
+
+      _firstDetectionMs ??= ended - (_streamStartedMs ?? ended);
+    } catch (error) {
+      _errorCount++;
+      _lastError = '$error';
+      _latestPose.value = null;
+      // 前几次原样打出来。否则「一次推理都没完成」在日志里只表现为
+      // infer=0.0fps，看不出是取帧格式不对、还是模型加载失败。
+      if (_errorCount <= 3) {
+        debugPrint('[probe] 推理异常 #$_errorCount：$error');
+      }
+    }
+    _logIfDue();
+  }
+
+  InputImage? _toInputImage(CameraImage image, InputImageRotation rotation) {
+    final format = InputImageFormatValue.fromRawValue(image.format.raw as int);
+    if (format == null || image.planes.isEmpty) return null;
+
+    return InputImage.fromBytes(
+      bytes: _packPlanes(image.planes),
+      metadata: InputImageMetadata(
+        size: Size(image.width.toDouble(), image.height.toDouble()),
+        rotation: rotation,
+        format: format,
+        bytesPerRow: image.planes.first.bytesPerRow,
+      ),
+    );
+  }
+
+  /// 把各平面拼成一整块连续字节。
+  ///
+  /// NV21 是半平面格式：Y 分量之后紧跟着交错的 VU。ML Kit 要的是一整块连续缓冲，
+  /// 而插件给的是一组 `Uint8List`。**只传第一个平面是个很隐蔽的错误** ——
+  /// 它不会报错，只会让模型在一张「上半截正常、下半截是垃圾」的图上推理，
+  /// 表现为关键点乱飞或频繁检不到人。
+  Uint8List _packPlanes(List<Plane> planes) {
+    if (planes.length == 1) return planes.first.bytes;
+    final total = planes.fold<int>(0, (sum, p) => sum + p.bytes.length);
+    final packed = Uint8List(total);
+    var offset = 0;
+    for (final plane in planes) {
+      packed.setRange(offset, offset + plane.bytes.length, plane.bytes);
+      offset += plane.bytes.length;
+    }
+    return packed;
+  }
+
+  // ---- 统计 ----
+
+  List<int> _within(List<int> times, int now) =>
+      times.where((t) => t >= now - _windowMs).toList();
+
+  double _rate(List<int> times, int now) => _within(times, now).length * 1000.0 / _windowMs;
+
+  /// 镜头方向的短标签，供每秒一行日志使用。
+  ///
+  /// 用 `front`/`back` 而不是中文，是为了让日志行仍然能被 grep / awk 直接处理。
+  /// 写成链式三元而不是 `switch`，是因为 `CameraLensDirection` 属于
+  /// `camera_platform_interface`，枚举成员随版本增删都算破坏性变更 ——
+  /// 穷尽式 `switch` 会在依赖升级后直接编译失败，而这里只需退化成 `ext`。
+  String get _lensTag => _lens == CameraLensDirection.front
+      ? 'front'
+      : _lens == CameraLensDirection.back
+          ? 'back'
+          : 'ext';
+
+  /// 骨架叠加的开关状态，供日志行使用。
+  ///
+  /// 与 `lens=` 同一条理由：它限定这一行帧率的适用范围。
+  /// 画骨架要花帧，开着测出来的数字和关掉测出来的不可比，
+  /// 而这两行日志在文本上一模一样。
+  String get _skelTag => !_showSkeleton
+      ? 'off'
+      : _mirror
+          ? 'on+mirror'
+          : 'on';
+
+  /// 镜头的中文说明。**必须带出它隐含的机位** —— 前置意味着正视，
+  /// 后置架在侧面意味着侧视，而这两者能判的故障不同（见 `domain/features.dart`）。
+  String get _lensLabel => _lens == CameraLensDirection.front
+      ? '前置 · 正视机位'
+      : _lens == CameraLensDirection.back
+          ? '后置 · 架在侧面则为侧视机位'
+          : '外接';
+
+  void _logIfDue() {
+    final now = _clock.elapsedMilliseconds;
+    if (now - _lastLogMs < 1000) return;
+    _lastLogMs = now;
+
+    // 注意：`_inferCosts` 里存的是**耗时**，不是时刻，所以不能用 `_within`
+    // （它按时间戳过滤）。2026-10-04 实装后 `infer_ms` 恒为 0，就是这个原因 ——
+    // 而它看起来像「推理不耗时间」，完全不会让人想到是统计代码写错了。
+    // 日志行与界面各有一份这个计算，两处同源，所以两处一起改。
+    final meanCost = _inferCosts.isEmpty
+        ? 0.0
+        : _inferCosts.reduce((a, b) => a + b) / _inferCosts.length;
+    debugPrint(
+      '[probe] t=${(now / 1000).toStringAsFixed(0)}s '
+      // 镜头方向紧跟时间戳：它限定后面每一个数字的适用范围，
+      // 因此必须出现在行首附近，而不是被别的字段挤出可见范围。
+      'lens=$_lensTag/${_sensorOrientation ?? '?'} '
+      // 骨架叠加的开关状态同理：**画骨架要花帧**，开着和关掉的帧率不可比，
+      // 而两行日志长得一模一样。
+      'skel=$_skelTag '
+      'infer=${_rate(_inferEnds, now).toStringAsFixed(1)}fps '
+      'cam=${_rate(_frameTimes, now).toStringAsFixed(1)}fps '
+      'infer_ms=${meanCost.toStringAsFixed(0)} '
+      'drop=${(_framesSeen == 0 ? 0 : _framesDropped * 100 ~/ _framesSeen)}% '
+      'det=${(_inferences == 0 ? 0 : _hitPoses * 100 ~/ _inferences)}% '
+      'vis=${(_inferences == 0 ? 0.0 : _visibleSum / _inferences).toStringAsFixed(1)} '
+      'fmt=${_observedRawFormat ?? '?'}/${_observedPlaneCount ?? '?'} '
+      'badfmt=$_formatFailures err=$_errorCount '
+      'feet=${_poseFrames < _minSample ? 'n/a' : '${_footPointsFrames * 100 ~/ _poseFrames}%'}'
+      '${_lastError == null ? '' : ' err0=${_shortError(_lastError!)}'}',
+    );
+
+    // 只保留窗口内的数据，否则跑五分钟会攒下十几万条记录。
+    _frameTimes.retainWhere((t) => t >= now - _windowMs);
+    _inferEnds.retainWhere((t) => t >= now - _windowMs);
+    // 耗时按**条数**裁，不按时刻 —— 见上面 meanCost 处的说明。
+    if (_inferCosts.length > 240) {
+      _inferCosts.removeRange(0, _inferCosts.length - 240);
+    }
+
+    if (mounted) setState(() {});
+  }
+
+  void _resetCounters() {
+    setState(() {
+      _framesSeen = 0;
+      _framesDropped = 0;
+      _inferences = 0;
+      _hitPoses = 0;
+      _visibleSum = 0;
+      _formatFailures = 0;
+      _errorCount = 0;
+      _lastError = null;
+      _firstDetectionMs = null;
+      // 下面三个当初漏掉过。**症状很隐蔽**：按下「重置统计」后，
+      // 累计推理数归零、帧率窗口清空，但 `feet=%` 仍在用上一轮的分子，
+      // 界面上看起来完全正常，只是那个百分比早已不是这次的数。
+      // 而 5 分钟验收流程恰好依赖「重置后的干净窗口」，所以这不是洁癖。
+      _poseFrames = 0;
+      _footPointsFrames = 0;
+      // 换镜头会换图像格式，所以实测格式必须重新观测，不能留着上一台相机的值。
+      _observedRawFormat = null;
+      _observedPlaneCount = null;
+      _frameTimes.clear();
+      _inferEnds.clear();
+      _inferCosts.clear();
+    });
+  }
+
+  /// 换镜头与换分辨率都要把相机和检测器整个重建，走同一条路径。
+  ///
+  /// **不要试图只改一个字段就接着用旧 controller。** `CameraController` 与
+  /// `InputImageRotation` 都绑死在具体那一台相机上 —— 前摄和后摄的
+  /// `sensorOrientation` 不同（通常 270 vs 90），复用旧值会让图像转正角度错 180 度，
+  /// 而表现只是「骨架躺倒」，很难联想到是换镜头留下的。
+  Future<void> _switchPreset(ResolutionPreset preset) async {
+    setState(() => _preset = preset);
+    await _restart();
+  }
+
+  Future<void> _switchLens(CameraLensDirection lens) async {
+    setState(() => _lens = lens);
+    await _restart();
+  }
+
+  Future<void> _restart() async {
+    await _teardown();
+    setState(() => _fatal = null);
+    _resetCounters();
+    await _boot();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = _controller;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Phase 0 · 推理帧率探针'),
+        actions: [
+          // 试听。**压测前必须先点一次。** 提示音是这条链路里唯一
+          // 「错了要等五分钟才知道」的部分：音量流走对了没有、这台设备有没有
+          // 闹钟铃声、勿扰放不放行 —— 都只能靠耳朵验，而那三件事在用户
+          // 站到两米外之后就都验不了了。
+          IconButton(
+            tooltip: '试听提示音',
+            onPressed: () => _playAlarm(seconds: 3),
+            icon: const Icon(Icons.volume_up),
+          ),
+          IconButton(
+            tooltip: _stressStartMs == null ? '开始 5 分钟压测' : '停止压测',
+            onPressed: _toggleStress,
+            icon: Icon(
+              _stressStartMs == null ? Icons.timer_outlined : Icons.stop_circle,
+            ),
+          ),
+          IconButton(
+            tooltip: '重置统计',
+            onPressed: _resetCounters,
+            icon: const Icon(Icons.restart_alt),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          if (!kReleaseMode)
+            Container(
+              width: double.infinity,
+              color: Colors.red.shade700,
+              padding: const EdgeInsets.all(8),
+              child: const Text(
+                '当前是 debug 构建，下面的数字没有参考价值。\n'
+                '请用 flutter run --release 重新运行。',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          Expanded(
+            flex: 3,
+            child: _preview(controller),
+          ),
+          Expanded(
+            flex: 5,
+            child: controller == null
+                ? Center(child: Text(_fatal ?? '正在启动相机…'))
+                : SingleChildScrollView(child: _readouts()),
+          ),
+          _presetBar(),
+        ],
+      ),
+    );
+  }
+
+  Widget _preview(CameraController? controller) {
+    if (controller == null || !controller.value.isInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    // 骨架走 `CameraPreview` 的 `child` 插槽，**不是自己在外面套一层 `Stack`**：
+    // 那个插槽被放进 `Stack(fit: StackFit.expand)`，与预览严格同尺寸同原点，
+    // 于是坐标映射退化成纯按比例缩放（见 `ui/skeleton_overlay.dart`）。
+    // 自己套 Stack 就得手动对齐尺寸，而那正是「差几个像素」这类错误的来源。
+    return CameraPreview(
+      controller,
+      child: _showSkeleton
+          ? CustomPaint(
+              painter: SkeletonPainter(
+                _latestPose,
+                mirror: _mirror,
+                visibilityThreshold: _visibilityThreshold,
+              ),
+            )
+          : const SizedBox.shrink(),
+    );
+  }
+
+  Widget _readouts() {
+    final now = _clock.elapsedMilliseconds;
+    final inferFps = _rate(_inferEnds, now);
+    final camFps = _rate(_frameTimes, now);
+    // 注意：`_inferCosts` 里存的是**耗时**，不是时刻，所以不能用 `_within`
+    // （它按时间戳过滤）。2026-10-04 实装后 `infer_ms` 恒为 0，就是这个原因 ——
+    // 而它看起来像「推理不耗时间」，完全不会让人想到是统计代码写错了。
+    // 日志行与界面各有一份这个计算，两处同源，所以两处一起改。
+    final meanCost = _inferCosts.isEmpty
+        ? 0.0
+        : _inferCosts.reduce((a, b) => a + b) / _inferCosts.length;
+    final dropRate = _framesSeen == 0 ? 0.0 : _framesDropped / _framesSeen * 100;
+    final hitRate = _inferences == 0 ? 0.0 : _hitPoses / _inferences * 100;
+    final meanVisible = _inferences == 0 ? 0.0 : _visibleSum / _inferences;
+
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _big(
+            '推理帧率',
+            '${inferFps.toStringAsFixed(1)} fps',
+            // 验收线来自开发计划：真机稳定 ≥15 FPS（推理帧率，非预览帧率）。
+            inferFps >= 15 ? Colors.green.shade700 : Colors.orange.shade800,
+            note: '验收线 15 fps —— 这是决策要看的那一个数字',
+          ),
+          // 倒计时紧跟大号帧率，而不是排在读数表末尾。
+          // **压测时唯一需要瞟一眼的就是这两个数**（还剩多久 / 现在多少帧），
+          // 而末尾那几行在手机上本来就要滚动才看得到。
+          //
+          // 单独包一层 ValueListenableBuilder **不是洁癖**：它每秒变一次，
+          // 若直接读字段就得让父级每秒 `setState` 一次，
+          // 而那会把相机预览每秒打断一帧（见 `_countdown` 的说明）。
+          ValueListenableBuilder<String>(
+            valueListenable: _countdown,
+            builder: (context, value, _) => _row('压测剩余', value),
+          ),
+          const SizedBox(height: 12),
+          _row('取帧率（相机上限）', '${camFps.toStringAsFixed(1)} fps'),
+          _row('单次推理耗时', '${meanCost.toStringAsFixed(0)} ms'),
+          _row('丢帧率', '${dropRate.toStringAsFixed(0)} %'),
+          _row(
+            '检出到人的比例',
+            _inferences < _minSample
+                ? '—（样本不足：$_hitPoses/$_inferences）'
+                : '${hitRate.toStringAsFixed(0)} %',
+          ),
+          // 均值同样要过样本门槛：`_inferences` 只有几帧时，「平均可见关键点
+          // 2.8」和「31.2」是同一件事的两种噪声写法，而界面上看不出区别。
+          _row(
+            '平均可见关键点',
+            _inferences < _minSample
+                ? '—（样本不足：$_inferences/$_minSample）'
+                : meanVisible.toStringAsFixed(1),
+          ),
+          // 单列一行：验收标准要求「含脚跟 29/30、脚尖 31/32」，
+          // 而平均点数证明不了这四个点在不在。
+          _row(
+            '四个脚部点齐全的比例',
+            _poseFrames < _minSample
+                ? '—（样本不足：$_footPointsFrames/$_poseFrames）'
+                : '${_footPointsFrames * 100 ~/ _poseFrames} %（$_footPointsFrames/$_poseFrames）',
+          ),
+          const SizedBox(height: 8),
+          _row('流启动到首帧结果', _firstDetectionMs == null ? '—' : '$_firstDetectionMs ms'),
+          _row('分辨率', _preset.name),
+          // 镜头必须显示，且要说清它隐含哪个机位 —— 帧率一样而机位不同的两次测量
+          // 不可比，而界面上若不写，事后没人分得清数据是哪次跑出来的。
+          _row('摄像头', _lensLabel),
+          _row('传感器朝向', _sensorOrientation == null ? '—' : '${_sensorOrientation!}°'),
+          // 请求的与实测的**必须分成两行**。`camera_android_camerax` 的 README
+          // 写明：请求 `ImageFormatGroup.nv21` 时，报出来的格式**仍然是
+          // `yuv420`**，只是字节被排成了 NV21。只显示请求值会让这一行撒谎 ——
+          // 2026-10-04 就是因为这个区别没被看见，多花了一轮排查。
+          _row('请求的格式组', _controller?.imageFormatGroup?.name ?? '—'),
+          _row(
+            '实测的图像格式',
+            _observedRawFormat == null
+                ? '—'
+                : 'raw=${_observedRawFormat!} / ${_observedPlaneCount!} 个平面',
+          ),
+          _row('累计推理 / 累计取帧', '$_inferences / $_framesSeen'),
+          if (_formatFailures > 0) _row('帧格式不受支持', '$_formatFailures 次'),
+          if (_errorCount > 0) _row('推理异常', '$_errorCount 次'),
+          if (_lastError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                '最后一次异常：$_lastError',
+                style: TextStyle(color: Colors.red.shade700, fontSize: 12),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _presetBar() => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 镜头单独一行，不跟分辨率混在一起 —— 它俩虽然都会重启相机，
+              // 但换镜头改变的是**能测什么**，换分辨率只改变**测得准多快**。
+              // 混排会让人以为它们是同一维度的选项。
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                children: [
+                  for (final lens in const [
+                    CameraLensDirection.front,
+                    CameraLensDirection.back,
+                  ])
+                    ChoiceChip(
+                      label: Text(
+                        lens == CameraLensDirection.front ? '前置' : '后置',
+                      ),
+                      selected: _lens == lens,
+                      onSelected: (selected) {
+                        if (selected && _lens != lens) _switchLens(lens);
+                      },
+                    ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                children: [
+                  for (final preset in const [
+                    ResolutionPreset.low,
+                    ResolutionPreset.medium,
+                    ResolutionPreset.high,
+                  ])
+                    ChoiceChip(
+                      label: Text(preset.name),
+                      selected: _preset == preset,
+                      onSelected: (selected) {
+                        if (selected && _preset != preset) _switchPreset(preset);
+                      },
+                    ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // 这两个不是相机的设置，而是**显示**的开关，所以是 FilterChip
+              // （可各自独立开关）而不是 ChoiceChip（一组里选一个）。
+              // 它们在这里是为了让「骨架的开销」可测：同一个机位、同一台设备，
+              // 开与关各跑一轮，差值就是绘制的代价。
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                children: [
+                  FilterChip(
+                    label: const Text('骨架'),
+                    selected: _showSkeleton,
+                    onSelected: (selected) =>
+                        setState(() => _showSkeleton = selected),
+                  ),
+                  // 关掉骨架时「镜像」没有意义，置灰而不是隐藏 ——
+                  // 隐藏会让人以为这个控件不存在，置灰还能看出两者有关系。
+                  FilterChip(
+                    label: const Text('镜像'),
+                    selected: _mirror,
+                    onSelected: _showSkeleton
+                        ? (selected) => setState(() => _mirror = selected)
+                        : null,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _big(String label, String value, Color color, {String? note}) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 13, color: Colors.black54)),
+          Text(
+            value,
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: color),
+          ),
+          if (note != null)
+            Text(note, style: const TextStyle(fontSize: 11, color: Colors.black45)),
+        ],
+      );
+
+  Widget _row(String label, String value) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 13, color: Colors.black54)),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 14,
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+}

@@ -1,0 +1,38 @@
+# VitalTeen 微调依赖 —— 仅在【租用的 GPU 机器】上安装
+#
+# 本文件不在本地开发环境中安装（体积 2GB+，且本地无 GPU）。
+# 参见 requirements-dev.txt。
+#
+# ⚠️ 版本锁定策略（重要）
+#
+# Laya 在 2026-09 开源后两周内从 0.1.1 迭代到 0.3.x，字段名发生过破坏性变更
+# （例如决策问题的选项字段由 options 改为 criteria），且 Router 的默认行为也调整过。
+# 因此：
+#
+#   1. 训练环境与推理环境必须装【完全相同的版本】
+#   2. 首次跑通后立刻用 pip freeze 生成 lock 文件并提交到仓库
+#   3. 同时锁定 HF checkpoint 的 revision（commit hash），不要只写分支名
+#
+# 版本漂移会导致「同一个 checkpoint 在训练脚本与推理服务里行为不一致」，
+# 而这种不一致不会报错，只会让效果变差——是本项目最难定位的一类问题。
+
+# ---- 决策模型 ----
+laya[serve]>=0.3,<0.4      # 首次跑通后改为 == 精确版本
+torch>=2.0
+transformers>=4.48
+
+# ---- 训练 ----
+accelerate>=1.0
+datasets>=3.0
+
+# ---- 评测与校准 ----
+# 温度拟合与 ECE 计算依赖；scikit-learn 提供 log_loss 等校准工具
+scikit-learn>=1.5
+
+# ---- 国内网络 ----
+# Hugging Face 直连在国内常超时，ModelScope 是 Laya 权重的可用镜像源
+modelscope>=1.18
+
+# ---- 工程 ----
+pyyaml>=6.0
+tqdm>=4.66

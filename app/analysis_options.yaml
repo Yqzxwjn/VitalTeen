@@ -1,0 +1,15 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  # 严格模式开前两条，第三条刻意不开：
+  #
+  #   strict-inference 会大量误报空集合字面量，而带噪声的检查最终一定会被关掉 ——
+  #   那比不开更糟。strict-casts / strict-raw-types 拦的都是「编译期不报错、
+  #   运行时才炸」的隐式转型，与前两条不同。
+  language:
+    strict-casts: true
+    strict-raw-types: true
+
+  exclude:
+    - build/**
+    - android/**

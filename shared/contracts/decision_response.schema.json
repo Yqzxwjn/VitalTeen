@@ -1,0 +1,342 @@
+{
+  "$defs": {
+    "DecisionFault": {
+      "additionalProperties": false,
+      "description": "决策层对一条错误给出的判定。",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "severity_level": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Severity Level",
+          "type": "integer"
+        },
+        "severity_score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Severity Score",
+          "type": "integer"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "$ref": "#/$defs/FaultEvidence"
+        }
+      },
+      "required": [
+        "code",
+        "name",
+        "severity_level",
+        "severity_score",
+        "confidence"
+      ],
+      "title": "DecisionFault",
+      "type": "object"
+    },
+    "DecisionMeta": {
+      "additionalProperties": false,
+      "description": "本次决策的元信息，用于审计与复现。",
+      "properties": {
+        "decision_model_version": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Decision Model Version",
+          "type": "string"
+        },
+        "thresholds_version": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Thresholds Version",
+          "type": "string"
+        },
+        "latency_ms": {
+          "minimum": 0,
+          "title": "Latency Ms",
+          "type": "integer"
+        },
+        "shuffled": {
+          "default": false,
+          "title": "Shuffled",
+          "type": "boolean"
+        },
+        "shuffle_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shuffle Seed"
+        }
+      },
+      "required": [
+        "thresholds_version",
+        "latency_ms"
+      ],
+      "title": "DecisionMeta",
+      "type": "object"
+    },
+    "FaultEvidence": {
+      "additionalProperties": false,
+      "description": "一条错误的证据摘要。",
+      "properties": {
+        "reps": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Reps",
+          "type": "array"
+        },
+        "metric": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric"
+        },
+        "mean_deviation": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mean Deviation"
+        }
+      },
+      "title": "FaultEvidence",
+      "type": "object"
+    },
+    "FaultRef": {
+      "additionalProperties": false,
+      "description": "对某个错误码的引用。",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "name"
+      ],
+      "title": "FaultRef",
+      "type": "object"
+    },
+    "Message": {
+      "additionalProperties": false,
+      "description": "面向用户展示的文案。\n\n只给**模板 ID 与参数**，不让模型生成自由文本 ——\n这既避开了 Laya 不擅长生成长文本的事实，也保证了青少年用户看到的每一句话\n都经过人工审阅，不会出现模型编造的医学建议。",
+      "properties": {
+        "template_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Template Id",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "template_id"
+      ],
+      "title": "Message",
+      "type": "object"
+    },
+    "PlanChoice": {
+      "additionalProperties": false,
+      "description": "从矫正方案候选集中选出的方案。",
+      "properties": {
+        "selected_plan_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Selected Plan Ids",
+          "type": "array"
+        },
+        "selection_reason": {
+          "default": "",
+          "maxLength": 500,
+          "title": "Selection Reason",
+          "type": "string"
+        },
+        "dose_note": {
+          "default": "",
+          "maxLength": 300,
+          "title": "Dose Note",
+          "type": "string"
+        }
+      },
+      "title": "PlanChoice",
+      "type": "object"
+    },
+    "Scores": {
+      "additionalProperties": false,
+      "description": "规范性评分。\n\n**只描述动作质量，永不冒充国标得分。** 国标得分只能在有成绩值时按官方评分表\n计算，两条链路严格分开（设计文档 §5.5）。",
+      "properties": {
+        "form_score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Form Score",
+          "type": "integer"
+        },
+        "rating": {
+          "maxLength": 8,
+          "minLength": 1,
+          "title": "Rating",
+          "type": "string"
+        },
+        "provisional": {
+          "default": false,
+          "title": "Provisional",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "form_score",
+        "rating"
+      ],
+      "title": "Scores",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "一次决策响应。",
+  "properties": {
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "abstain"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "abstain_reason": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Abstain Reason"
+    },
+    "primary_fault": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FaultRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "faults": {
+      "items": {
+        "$ref": "#/$defs/DecisionFault"
+      },
+      "title": "Faults",
+      "type": "array"
+    },
+    "gates": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Gates",
+      "type": "object"
+    },
+    "scores": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Scores"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "choice": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PlanChoice"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "message": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Message"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "meta": {
+      "$ref": "#/$defs/DecisionMeta"
+    }
+  },
+  "required": [
+    "request_id",
+    "status",
+    "meta"
+  ],
+  "title": "DecisionResponse",
+  "type": "object",
+  "$comment": "由 server/tools/export_schema.py 从 app/contracts.py 的 DecisionResponse 导出。请勿手工编辑本文件 —— 修改契约请改 Python 定义后重新导出。"
+}

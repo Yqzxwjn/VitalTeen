@@ -1,0 +1,881 @@
+{
+  "fixture_version": "1.1",
+  "generated_by": "domain/tools/build_fixtures.py",
+  "frame_width": 720,
+  "frame_height": 1280,
+  "feature_codes": [
+    "knee_angle_L",
+    "hip_angle_L",
+    "elbow_angle_L",
+    "shoulder_angle_L",
+    "thigh_tilt_L",
+    "frontal_knee_angle_L",
+    "frontal_knee_offset_L",
+    "heel_rise_ratio_L",
+    "knee_angle_R",
+    "hip_angle_R",
+    "elbow_angle_R",
+    "shoulder_angle_R",
+    "thigh_tilt_R",
+    "frontal_knee_angle_R",
+    "frontal_knee_offset_R",
+    "heel_rise_ratio_R",
+    "trunk_lean",
+    "body_line_angle",
+    "hip_height_ratio",
+    "pelvis_offset_ratio",
+    "knee_symmetry",
+    "frontal_knee_angle_max",
+    "torso_length_px",
+    "shoulder_width_px",
+    "leg_spread_ratio",
+    "shoulder_angle_min",
+    "body_line_offset_ratio",
+    "shoulder_height_ratio",
+    "foot_height_ratio",
+    "foot_gap_ratio",
+    "mouth_wrist_dy"
+  ],
+  "base_pose": {
+    "NOSE": [
+      0.51,
+      0.1
+    ],
+    "LEFT_EYE_INNER": [
+      0.505,
+      0.1
+    ],
+    "LEFT_EYE": [
+      0.505,
+      0.1
+    ],
+    "LEFT_EYE_OUTER": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_EYE_INNER": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_EYE": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_EYE_OUTER": [
+      0.505,
+      0.1
+    ],
+    "LEFT_EAR": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_EAR": [
+      0.505,
+      0.1
+    ],
+    "MOUTH_LEFT": [
+      0.505,
+      0.1
+    ],
+    "MOUTH_RIGHT": [
+      0.505,
+      0.1
+    ],
+    "LEFT_SHOULDER": [
+      0.498,
+      0.22
+    ],
+    "RIGHT_SHOULDER": [
+      0.502,
+      0.22
+    ],
+    "LEFT_ELBOW": [
+      0.47,
+      0.33
+    ],
+    "RIGHT_ELBOW": [
+      0.474,
+      0.33
+    ],
+    "LEFT_WRIST": [
+      0.462,
+      0.43
+    ],
+    "RIGHT_WRIST": [
+      0.466,
+      0.43
+    ],
+    "LEFT_PINKY": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_PINKY": [
+      0.505,
+      0.1
+    ],
+    "LEFT_INDEX": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_INDEX": [
+      0.505,
+      0.1
+    ],
+    "LEFT_THUMB": [
+      0.505,
+      0.1
+    ],
+    "RIGHT_THUMB": [
+      0.505,
+      0.1
+    ],
+    "LEFT_HIP": [
+      0.498,
+      0.45
+    ],
+    "RIGHT_HIP": [
+      0.502,
+      0.45
+    ],
+    "LEFT_KNEE": [
+      0.5,
+      0.68
+    ],
+    "RIGHT_KNEE": [
+      0.502,
+      0.68
+    ],
+    "LEFT_ANKLE": [
+      0.5,
+      0.9
+    ],
+    "RIGHT_ANKLE": [
+      0.502,
+      0.9
+    ],
+    "LEFT_HEEL": [
+      0.482,
+      0.922
+    ],
+    "RIGHT_HEEL": [
+      0.484,
+      0.922
+    ],
+    "LEFT_FOOT_INDEX": [
+      0.525,
+      0.922
+    ],
+    "RIGHT_FOOT_INDEX": [
+      0.527,
+      0.922
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "standing_sagittal",
+      "description": "侧视直立基准。膝角≈180、躯干倾角≈0、髋高出膝一个躯干长。",
+      "camera_view": "sagittal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {},
+      "expected": {
+        "knee_angle_L": 179.719751,
+        "hip_angle_L": 179.719751,
+        "elbow_angle_L": 174.42824,
+        "shoulder_angle_L": 8.148332,
+        "thigh_tilt_L": -89.719751,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 180.0,
+        "hip_angle_R": 180.0,
+        "elbow_angle_R": 174.42824,
+        "shoulder_angle_R": 8.148332,
+        "thigh_tilt_R": -90.0,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": 0.0,
+        "body_line_angle": 179.92838,
+        "hip_height_ratio": 1.0,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": 0.001558,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 8.148332,
+        "body_line_offset_ratio": 1e-06,
+        "shoulder_height_ratio": 2.956522,
+        "foot_height_ratio": 0.33913,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.434783
+      }
+    },
+    {
+      "id": "squat_bottom_parallel",
+      "description": "平行蹲最低点：大腿水平、膝角≈90。兼作倾角负零回归 —— 大腿向量是纯水平右向，修复前 thigh_tilt 会返回 -0.0。",
+      "camera_view": "sagittal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "LEFT_HIP": [
+          0.44,
+          0.7
+        ],
+        "RIGHT_HIP": [
+          0.44,
+          0.7
+        ],
+        "LEFT_KNEE": [
+          0.52,
+          0.7
+        ],
+        "RIGHT_KNEE": [
+          0.52,
+          0.7
+        ],
+        "LEFT_ANKLE": [
+          0.52,
+          0.9
+        ],
+        "RIGHT_ANKLE": [
+          0.52,
+          0.9
+        ],
+        "LEFT_SHOULDER": [
+          0.428,
+          0.45
+        ],
+        "RIGHT_SHOULDER": [
+          0.432,
+          0.45
+        ],
+        "LEFT_HEEL": [
+          0.502,
+          0.922
+        ],
+        "RIGHT_HEEL": [
+          0.504,
+          0.922
+        ],
+        "LEFT_FOOT_INDEX": [
+          0.545,
+          0.922
+        ],
+        "RIGHT_FOOT_INDEX": [
+          0.547,
+          0.922
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 90.0,
+        "hip_angle_L": 91.54661,
+        "elbow_angle_L": 8.561095,
+        "shoulder_angle_L": 167.315723,
+        "thigh_tilt_L": 0.0,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 90.0,
+        "hip_angle_R": 91.031213,
+        "elbow_angle_R": 8.561095,
+        "shoulder_angle_R": 167.831121,
+        "thigh_tilt_R": 0.0,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": -1.288938,
+        "body_line_angle": 168.608554,
+        "hip_height_ratio": 0.0,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": 0.0,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 320.08099,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 167.315723,
+        "body_line_offset_ratio": 0.009996,
+        "shoulder_height_ratio": 1.799545,
+        "foot_height_ratio": 0.311921,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.319666
+      }
+    },
+    {
+      "id": "squat_bottom_parallel_facing_left",
+      "description": "与上一条几何相同，但人面朝图像左侧（整体镜像）。锁定倾角函数的象限与负零行为 —— 修复前纯左向向量会返回 -180.0，落在 docstring 声明的 (-180, 180] 之外。",
+      "camera_view": "sagittal",
+      "mirrored": true,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "LEFT_HIP": [
+          0.44,
+          0.7
+        ],
+        "RIGHT_HIP": [
+          0.44,
+          0.7
+        ],
+        "LEFT_KNEE": [
+          0.52,
+          0.7
+        ],
+        "RIGHT_KNEE": [
+          0.52,
+          0.7
+        ],
+        "LEFT_ANKLE": [
+          0.52,
+          0.9
+        ],
+        "RIGHT_ANKLE": [
+          0.52,
+          0.9
+        ],
+        "LEFT_SHOULDER": [
+          0.428,
+          0.45
+        ],
+        "RIGHT_SHOULDER": [
+          0.432,
+          0.45
+        ],
+        "LEFT_HEEL": [
+          0.502,
+          0.922
+        ],
+        "RIGHT_HEEL": [
+          0.504,
+          0.922
+        ],
+        "LEFT_FOOT_INDEX": [
+          0.545,
+          0.922
+        ],
+        "RIGHT_FOOT_INDEX": [
+          0.547,
+          0.922
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 90.0,
+        "hip_angle_L": 91.54661,
+        "elbow_angle_L": 8.561095,
+        "shoulder_angle_L": 167.315723,
+        "thigh_tilt_L": 180.0,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 90.0,
+        "hip_angle_R": 91.031213,
+        "elbow_angle_R": 8.561095,
+        "shoulder_angle_R": 167.831121,
+        "thigh_tilt_R": 180.0,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": 1.288938,
+        "body_line_angle": 168.608554,
+        "hip_height_ratio": 0.0,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": 0.0,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 320.08099,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 167.315723,
+        "body_line_offset_ratio": 0.009996,
+        "shoulder_height_ratio": 1.799545,
+        "foot_height_ratio": 0.311921,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.319666
+      }
+    },
+    {
+      "id": "squat_bottom_shallow",
+      "description": "浅蹲最低点：膝角≈169，用于验证「下蹲深度不足」规则会命中。与 squat_bottom_parallel 构成对照。",
+      "camera_view": "sagittal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "LEFT_HIP": [
+          0.46,
+          0.55
+        ],
+        "RIGHT_HIP": [
+          0.46,
+          0.55
+        ],
+        "LEFT_KNEE": [
+          0.505,
+          0.68
+        ],
+        "RIGHT_KNEE": [
+          0.505,
+          0.68
+        ],
+        "LEFT_ANKLE": [
+          0.505,
+          0.9
+        ],
+        "RIGHT_ANKLE": [
+          0.505,
+          0.9
+        ],
+        "LEFT_SHOULDER": [
+          0.448,
+          0.3
+        ],
+        "RIGHT_SHOULDER": [
+          0.452,
+          0.3
+        ],
+        "LEFT_HEEL": [
+          0.487,
+          0.922
+        ],
+        "RIGHT_HEEL": [
+          0.489,
+          0.922
+        ],
+        "LEFT_FOOT_INDEX": [
+          0.53,
+          0.922
+        ],
+        "RIGHT_FOOT_INDEX": [
+          0.532,
+          0.922
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 168.981714,
+        "hip_angle_L": 170.528324,
+        "elbow_angle_L": 155.007281,
+        "shoulder_angle_L": 20.869537,
+        "thigh_tilt_L": -78.981714,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 168.981714,
+        "hip_angle_R": 170.012927,
+        "elbow_angle_R": 155.007281,
+        "shoulder_angle_R": 21.384935,
+        "thigh_tilt_R": -78.981714,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": -1.288938,
+        "body_line_angle": 177.152427,
+        "hip_height_ratio": 0.519868,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": 0.0,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 320.08099,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 20.869537,
+        "body_line_offset_ratio": 0.001494,
+        "shoulder_height_ratio": 2.399393,
+        "foot_height_ratio": 0.311921,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.319666
+      }
+    },
+    {
+      "id": "standing_asymmetric_knee",
+      "description": "直立但右膝前移。锁定「左右侧特征各自独立、不串用关键点」—— 若实现里左右腿误用了同一组关键点，左膝角会跟着一起变，本场景专门抓这个。",
+      "camera_view": "sagittal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "RIGHT_KNEE": [
+          0.56,
+          0.68
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 179.719751,
+        "hip_angle_L": 179.719751,
+        "elbow_angle_L": 174.42824,
+        "shoulder_angle_L": 8.148332,
+        "thigh_tilt_L": -89.719751,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 163.491351,
+        "hip_angle_R": 171.926579,
+        "elbow_angle_R": 174.42824,
+        "shoulder_angle_R": 8.148332,
+        "thigh_tilt_R": -81.926579,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": 0.0,
+        "body_line_angle": 179.92838,
+        "hip_height_ratio": 1.0,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": 0.094568,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 8.148332,
+        "body_line_offset_ratio": 1e-06,
+        "shoulder_height_ratio": 2.956522,
+        "foot_height_ratio": 0.33913,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.434783
+      }
+    },
+    {
+      "id": "standing_frontal_valgus",
+      "description": "正视、两腿分开而**两膝内扣**（膝点从髋-踝连线向内偏，额状面膝角≈12.7）。与 standing_frontal_straddle 是**同一副站姿、只差膝的位置**，两者构成一对 12.7° 对 0° 的对照 —— 开合跳的「落地膝内扣」判定问的正是这个量，而没有这一对的话，把方向写反（腿越直越算内扣）在 fixture 上完全看不出来。它同时锁定「额状面膝角在正视下可用、而依赖侧视的特征在正视下必须判为机位不匹配」。**改这组数之前先读 `jj.dart` 的规则方向。**",
+      "camera_view": "frontal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "LEFT_SHOULDER": [
+          0.44,
+          0.22
+        ],
+        "RIGHT_SHOULDER": [
+          0.56,
+          0.22
+        ],
+        "LEFT_ELBOW": [
+          0.42,
+          0.33
+        ],
+        "RIGHT_ELBOW": [
+          0.58,
+          0.33
+        ],
+        "LEFT_WRIST": [
+          0.4,
+          0.43
+        ],
+        "RIGHT_WRIST": [
+          0.6,
+          0.43
+        ],
+        "LEFT_HIP": [
+          0.47,
+          0.45
+        ],
+        "RIGHT_HIP": [
+          0.53,
+          0.45
+        ],
+        "LEFT_KNEE": [
+          0.47,
+          0.675
+        ],
+        "RIGHT_KNEE": [
+          0.53,
+          0.675
+        ],
+        "LEFT_ANKLE": [
+          0.38,
+          0.9
+        ],
+        "RIGHT_ANKLE": [
+          0.62,
+          0.9
+        ],
+        "LEFT_HEEL": [
+          0.38,
+          0.922
+        ],
+        "RIGHT_HEEL": [
+          0.62,
+          0.922
+        ],
+        "LEFT_FOOT_INDEX": [
+          0.34,
+          0.922
+        ],
+        "RIGHT_FOOT_INDEX": [
+          0.66,
+          0.922
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 167.319617,
+        "hip_angle_L": 175.803752,
+        "elbow_angle_L": 179.420706,
+        "shoulder_angle_L": 10.03574,
+        "thigh_tilt_L": -90.0,
+        "frontal_knee_angle_L": 12.680383,
+        "frontal_knee_offset_L": -0.111795,
+        "heel_rise_ratio_L": null,
+        "knee_angle_R": 167.319617,
+        "hip_angle_R": 175.803752,
+        "elbow_angle_R": 179.420706,
+        "shoulder_angle_R": 10.03574,
+        "thigh_tilt_R": -90.0,
+        "frontal_knee_angle_R": 12.680383,
+        "frontal_knee_offset_R": 0.111795,
+        "heel_rise_ratio_R": null,
+        "trunk_lean": 0.0,
+        "body_line_angle": null,
+        "hip_height_ratio": 0.978261,
+        "pelvis_offset_ratio": 0.0,
+        "knee_symmetry": 0.0,
+        "frontal_knee_angle_max": 12.680383,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 86.4,
+        "leg_spread_ratio": 2.0,
+        "shoulder_angle_min": 10.03574,
+        "body_line_offset_ratio": null,
+        "shoulder_height_ratio": null,
+        "foot_height_ratio": null,
+        "foot_gap_ratio": null,
+        "mouth_wrist_dy": -1.434783
+      }
+    },
+    {
+      "id": "standing_frontal_straddle",
+      "description": "正视、两腿分开的站姿（肩宽 0.12、两踝间距 0.24，比值恰好 2.0）。锁定 `leg_spread_ratio` 的分子分母 —— 基准姿态里两者是 0.004 与 0.002，比值 0.5 是个太圆的数，分子分母写反、漏除肩宽、或忘了取绝对值都未必看得出来。膝点取在髋-踝连线上，所以额状面膝角≈0，给「没有内扣」留一个干净参照。",
+      "camera_view": "frontal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "LEFT_SHOULDER": [
+          0.44,
+          0.22
+        ],
+        "RIGHT_SHOULDER": [
+          0.56,
+          0.22
+        ],
+        "LEFT_ELBOW": [
+          0.42,
+          0.33
+        ],
+        "RIGHT_ELBOW": [
+          0.58,
+          0.33
+        ],
+        "LEFT_WRIST": [
+          0.4,
+          0.43
+        ],
+        "RIGHT_WRIST": [
+          0.6,
+          0.43
+        ],
+        "LEFT_HIP": [
+          0.47,
+          0.45
+        ],
+        "RIGHT_HIP": [
+          0.53,
+          0.45
+        ],
+        "LEFT_KNEE": [
+          0.425,
+          0.675
+        ],
+        "RIGHT_KNEE": [
+          0.575,
+          0.675
+        ],
+        "LEFT_ANKLE": [
+          0.38,
+          0.9
+        ],
+        "RIGHT_ANKLE": [
+          0.62,
+          0.9
+        ],
+        "LEFT_HEEL": [
+          0.38,
+          0.922
+        ],
+        "RIGHT_HEEL": [
+          0.62,
+          0.922
+        ],
+        "LEFT_FOOT_INDEX": [
+          0.34,
+          0.922
+        ],
+        "RIGHT_FOOT_INDEX": [
+          0.66,
+          0.922
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 180.0,
+        "hip_angle_L": 169.384966,
+        "elbow_angle_L": 179.420706,
+        "shoulder_angle_L": 10.03574,
+        "thigh_tilt_L": -96.418787,
+        "frontal_knee_angle_L": 0.0,
+        "frontal_knee_offset_L": 0.0,
+        "heel_rise_ratio_L": null,
+        "knee_angle_R": 180.0,
+        "hip_angle_R": 169.384966,
+        "elbow_angle_R": 179.420706,
+        "shoulder_angle_R": 10.03574,
+        "thigh_tilt_R": -83.581213,
+        "frontal_knee_angle_R": 0.0,
+        "frontal_knee_offset_R": 0.0,
+        "heel_rise_ratio_R": null,
+        "trunk_lean": 0.0,
+        "body_line_angle": null,
+        "hip_height_ratio": 0.978261,
+        "pelvis_offset_ratio": 0.0,
+        "knee_symmetry": 0.0,
+        "frontal_knee_angle_max": 0.0,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 86.4,
+        "leg_spread_ratio": 2.0,
+        "shoulder_angle_min": 10.03574,
+        "body_line_offset_ratio": null,
+        "shoulder_height_ratio": null,
+        "foot_height_ratio": null,
+        "foot_gap_ratio": null,
+        "mouth_wrist_dy": -1.434783
+      }
+    },
+    {
+      "id": "standing_frontal_one_arm_low",
+      "description": "正视，右臂举过头顶、左臂垂在体侧。锁定 `shoulder_angle_min` 取的是**小**的那一侧 —— 基准姿态两臂对称，min 与 max 相等，把实现换成取大者也照样对得上；只有两臂角度明显不同（这里约 9° 对约 171°）才分得开。这一条直接决定开合跳「手臂上举幅度不足」会不会因为一侧举得高就放过。",
+      "camera_view": "frontal",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {
+        "RIGHT_ELBOW": [
+          0.52,
+          0.1
+        ],
+        "RIGHT_WRIST": [
+          0.53,
+          0.02
+        ]
+      },
+      "expected": {
+        "knee_angle_L": 179.719751,
+        "hip_angle_L": 179.719751,
+        "elbow_angle_L": 174.42824,
+        "shoulder_angle_L": 8.148332,
+        "thigh_tilt_L": -89.719751,
+        "frontal_knee_angle_L": 0.280249,
+        "frontal_knee_offset_L": -0.002391,
+        "heel_rise_ratio_L": null,
+        "knee_angle_R": 180.0,
+        "hip_angle_R": 180.0,
+        "elbow_angle_R": 179.199082,
+        "shoulder_angle_R": 175.177092,
+        "thigh_tilt_R": -90.0,
+        "frontal_knee_angle_R": 0.0,
+        "frontal_knee_offset_R": 0.0,
+        "heel_rise_ratio_R": null,
+        "trunk_lean": 0.0,
+        "body_line_angle": null,
+        "hip_height_ratio": 1.0,
+        "pelvis_offset_ratio": -0.25,
+        "knee_symmetry": 0.001558,
+        "frontal_knee_angle_max": 0.280249,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": 0.5,
+        "shoulder_angle_min": 8.148332,
+        "body_line_offset_ratio": null,
+        "shoulder_height_ratio": null,
+        "foot_height_ratio": null,
+        "foot_gap_ratio": null,
+        "mouth_wrist_dy": -0.543478
+      }
+    },
+    {
+      "id": "standing_oblique45",
+      "description": "斜前 45 度机位。用于锁定机位集合的边界：斜视下额状面特征仍应不可用，而脚跟抬升可用。",
+      "camera_view": "oblique45",
+      "mirrored": false,
+      "occluded_landmark_visibility": null,
+      "overrides": {},
+      "expected": {
+        "knee_angle_L": 179.719751,
+        "hip_angle_L": 179.719751,
+        "elbow_angle_L": 174.42824,
+        "shoulder_angle_L": 8.148332,
+        "thigh_tilt_L": -89.719751,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 180.0,
+        "hip_angle_R": 180.0,
+        "elbow_angle_R": 174.42824,
+        "shoulder_angle_R": 8.148332,
+        "thigh_tilt_R": -90.0,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": 0.0,
+        "body_line_angle": 179.92838,
+        "hip_height_ratio": 1.0,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": 0.001558,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 8.148332,
+        "body_line_offset_ratio": 1e-06,
+        "shoulder_height_ratio": 2.956522,
+        "foot_height_ratio": 0.33913,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.434783
+      }
+    },
+    {
+      "id": "standing_occluded_knee",
+      "description": "左膝被遮挡（可见性 0.2，低于门控 0.5）。锁定铁律二：依赖该点的特征必须输出 null 并标注 low_visibility，**绝不允许填 0** —— 一个编造的 0 度膝角会被规则引擎当成「膝盖完全对折」。",
+      "camera_view": "sagittal",
+      "mirrored": false,
+      "occluded_landmark_visibility": 0.2,
+      "overrides": {
+        "LEFT_KNEE": [
+          0.5,
+          0.68
+        ]
+      },
+      "expected": {
+        "knee_angle_L": null,
+        "hip_angle_L": null,
+        "elbow_angle_L": 174.42824,
+        "shoulder_angle_L": 8.148332,
+        "thigh_tilt_L": null,
+        "frontal_knee_angle_L": null,
+        "frontal_knee_offset_L": null,
+        "heel_rise_ratio_L": 0.0,
+        "knee_angle_R": 180.0,
+        "hip_angle_R": 180.0,
+        "elbow_angle_R": 174.42824,
+        "shoulder_angle_R": 8.148332,
+        "thigh_tilt_R": -90.0,
+        "frontal_knee_angle_R": null,
+        "frontal_knee_offset_R": null,
+        "heel_rise_ratio_R": 0.0,
+        "trunk_lean": 0.0,
+        "body_line_angle": 179.92838,
+        "hip_height_ratio": null,
+        "pelvis_offset_ratio": null,
+        "knee_symmetry": null,
+        "frontal_knee_angle_max": null,
+        "torso_length_px": 294.4,
+        "shoulder_width_px": 2.88,
+        "leg_spread_ratio": null,
+        "shoulder_angle_min": 8.148332,
+        "body_line_offset_ratio": 1e-06,
+        "shoulder_height_ratio": 2.956522,
+        "foot_height_ratio": 0.33913,
+        "foot_gap_ratio": 0.0,
+        "mouth_wrist_dy": -1.434783
+      }
+    }
+  ]
+}

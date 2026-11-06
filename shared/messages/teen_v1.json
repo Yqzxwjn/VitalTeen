@@ -1,0 +1,160 @@
+{
+  "catalog_version": "teen_v1",
+  "locale": "zh-Hans",
+  "note": "给青少年看的一句话总述模板。服务端只回 template_id 与 params（见 server/app/service.py 的 _build_message），正文由端侧按 ID 在这里查 —— 所以改文案只改这里，不要改端侧代码。全部条目目前都是种子稿、未经传播学评审：reviewed 为 false 期间，报告页会带一句「文案为草稿」的说明。模板里出现而 params 里没有的占位符，端侧不会硬填，整句作废改用 fallback_template_id —— 宁可少说一句，也不要在句子里留下空格或猜一个数。",
+  "fallback_template_id": "msg_generic_teen_v1",
+  "templates": {
+    "msg_squat_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，没有发现需要留意的地方。",
+      "reviewed": false
+    },
+    "msg_squat_knee_valgus_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_squat_insufficient_depth_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_squat_excessive_trunk_lean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_squat_heel_rise_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_squat_asymmetry_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_slj_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，起跳、腾空、落地都没发现需要留意的地方。",
+      "reviewed": false
+    },
+    "msg_slj_slj_prejump_heel_off_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_slj_slj_takeoff_async_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_slj_slj_land_async_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_slj_slj_land_stiff_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_slj_slj_trunk_control_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_jj_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，开合、上举、落地都没发现需要留意的地方。",
+      "reviewed": false
+    },
+    "msg_jj_jj_insufficient_spread_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_jj_jj_insufficient_arm_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_jj_jj_knee_valgus_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pu_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，下放深度、顶部伸直和身体有没有成一条线都过得去。",
+      "reviewed": false
+    },
+    "msg_pu_pu_insufficient_depth_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pu_pu_incomplete_extension_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pu_pu_hip_sag_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pu_pu_hip_pike_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_su_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，肩背贴垫、臀不离垫、屈膝角度都没发现需要留意的地方。",
+      "reviewed": false
+    },
+    "msg_su_su_shoulder_not_ground_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_su_su_hip_lift_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_su_su_knee_angle_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_rope_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，落地缓冲、身体重心、两只脚的起落都没发现需要留意的地方。",
+      "reviewed": false
+    },
+    "msg_rope_rope_low_buffer_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_rope_rope_trunk_lean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_rope_rope_single_leg_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pullup_clean_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，手臂回到伸直、下颌过杠、身体没有靠摆动借力，这三处都没发现需要留意的地方。",
+      "reviewed": false
+    },
+    "msg_pullup_pullup_not_dead_hang_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pullup_pullup_chin_not_over_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_pullup_pullup_swing_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数。最需要先改的是{primary}，它在 {primary_count} 次里出现过。",
+      "reviewed": false
+    },
+    "msg_plank_clean_teen_v1": {
+      "text": "这一组撑了 {total} 段，都挺住了。",
+      "reviewed": false
+    },
+    "msg_plank_plank_hip_sag_teen_v1": {
+      "text": "这一组撑了 {total} 段。最需要先改的是{primary}，它在 {primary_count} 段里出现过。",
+      "reviewed": false
+    },
+    "msg_plank_plank_hip_pike_teen_v1": {
+      "text": "这一组撑了 {total} 段。最需要先改的是{primary}，它在 {primary_count} 段里出现过。",
+      "reviewed": false
+    },
+    "msg_plank_plank_elbow_teen_v1": {
+      "text": "这一组撑了 {total} 段。最需要先改的是{primary}，它在 {primary_count} 段里出现过。",
+      "reviewed": false
+    },
+    "msg_generic_teen_v1": {
+      "text": "这一组 {total} 次里有 {valid} 次算数，下面是要留意的地方。",
+      "reviewed": false
+    }
+  }
+}

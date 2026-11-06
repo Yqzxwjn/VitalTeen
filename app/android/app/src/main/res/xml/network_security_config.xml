@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  明文 HTTP 策略。
+
+  ## 为什么需要它
+
+  决策服务跑在演示现场的笔记本上，手机通过 USB 转发（`adb reverse tcp:8080
+  tcp:8080`）访问它。这条链路没有 TLS —— 局域网 IP 每换一个地方就变一次，
+  按域固定证书在这里无从谈起，而自签证书在答辩现场是又一件会出事的事。
+
+  Android 9（API 28）起，明文流量默认被禁止。**不写这一条的话，真机上的表现
+  是连接直接失败** —— 与「服务没起」长得一模一样，排查时会一路怀疑服务、
+  怀疑 adb，而病因在这里。
+
+  ## 为什么是 `cleartextTrafficPermitted` 而不是 `domain-config`
+
+  理想写法是只给 `127.0.0.1` 开口子。但演示时也可能直接填局域网 IP
+  （面板里那个地址就是可改的），逐个列白名单只会把「换个地址就连不上」
+  这件事留到现场。这里的取舍是：**这是一个演示用的构建**，
+  它发出去的是一份不含影像的动作特征；把口子开在整个 base-config 上，
+  换来的是「地址怎么填都连得上」。
+
+  ## 如果哪天上生产
+
+  改成 `domain-config`，把决策服务那个域名列进来，其余全部要求 HTTPS。
+  那时候服务端也该有真证书与真鉴权 —— 现在这套（明文 + 共享 key）
+  是演示级，README 里写明了。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

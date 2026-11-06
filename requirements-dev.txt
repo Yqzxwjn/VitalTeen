@@ -1,0 +1,23 @@
+# VitalTeen 本地开发依赖（轻量）
+#
+# 说明：这里【不包含】 torch / transformers。
+# 微调与推理所需的深度学习依赖体积大（2GB+）且只在租用的 GPU 机器上需要，
+# 见 ml/requirements-train.txt（Phase 2 建立）。
+
+# 数值与数据处理
+numpy>=2.0
+pandas>=2.2
+
+# 决策服务
+flask>=3.0
+requests>=2.32
+pydantic>=2.9
+python-dotenv>=1.0
+
+# 契约校验（校验领域层 ↔ 决策层的 JSON 契约与 golden fixtures）
+jsonschema>=4.23
+
+# 测试与代码质量
+pytest>=8.3
+pytest-cov>=6.0
+ruff>=0.8

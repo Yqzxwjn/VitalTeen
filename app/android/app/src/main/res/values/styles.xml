@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 窗口主题。**只有这一份，没有 values-night/。**
+
+     Flutter 模板建了一份 `values-night/styles.xml`，深色模式下把窗口换成
+     `Theme.Black.NoTitleBar`。那份东西在本应用里是错的，而且错法很难被发现：
+
+     - 启动窗口会变成**黑的**（`?android:colorBackground` 在深色下是黑），
+       而 `launch_background` 里那张开屏图是**白底**的 —— 深色模式的用户会先看到
+       一下黑屏，再被一张白图糊上来。浅色模式下这两屏是接在一起的，
+       所以这个毛病只在深色模式的机器上出现，开发时多半碰不到。
+     - 黑底主题连状态栏图标的颜色一起换掉：白底上放浅色图标，等于没有图标。
+
+     而这个应用**本来就是浅色的**：`MaterialApp` 只给了 `theme:`，没给
+     `darkTheme:`，深色模式下跑的仍然是浅色主题（练习页那一屏的深色是它自己
+     套的一层 `Theme`，与外部的深色设置无关）。既然界面不跟随深色，
+     窗口也不该跟随 —— 两边不一致才是真的怪。
+
+     所以删掉了 night 那一份，两份主题在两个模式下都用 `Theme.Light.NoTitleBar`。 -->
+<resources>
+    <!-- 两份主题共用的那一层：**窗口铺满整屏、两根系统栏透明**。
+
+         这三行是「底部那条黑带」的正面修法，缺一不可：
+
+         - `windowDrawsSystemBarBackgrounds` 为真，系统才**不再自己画**那两条栏，
+           把这块地方让给窗口背景。默认值在 AOSP 的 `Theme`（也就是
+           `Theme.Light.NoTitleBar` 的祖先）里是**假**，所以默认情况下
+           系统会拿 `navigationBarColor` 糊一条不透明的黑 —— 真机截图上下边缘
+           那条 44 物理像素的黑带就是它。
+         - 两个颜色都设成透明，才是「让出来」之后**透出应用自己的底色**：
+           浅色页面底下是浅色，练习页底下是相机画面。
+         - 不开 transparent 只开 drawsSystemBarBackgrounds 的话，系统画的
+           仍然是默认的黑，只是画的位置换了。
+
+         这一层挂在主题上而不是只写在 Dart 里，是因为**启动窗口也读它**：
+         Flutter 引擎起来之前屏幕上是 `windowBackground` 那张开屏图
+         （见 drawable/launch_background.xml），而那时没有任何一行 Dart 在跑，
+         没人能替它把导航栏设透明。少了这三行，开屏图会在最下面被切掉一条黑边。
+
+         `windowLightStatusBar` 同理：开屏图是**白底**的，而 AOSP 主题默认
+         状态栏图标是浅色 —— 那就是白底上放白图标。置真之后**原生这层**
+         就是深色图标，不必等 Flutter 开始跑（`main.dart` 里那句
+         `setSystemUIOverlayStyle` 管的是引擎起来之后，两段是接力关系）。
+
+         这几个属性都是 API 21/23 就有的，minSdk 是 24，不需要 `values-v*`
+         限定符。`windowLightNavigationBar` 是 API 27 才有的，24–26 上会被
+         系统静默忽略（那两版上启动窗口的导航栏图标仍是浅色，压在开屏图底部
+         的白色上会看不见）—— 为三行覆盖率建一个 `values-v27/` 目录、
+         再把整个主题复制一遍，代价大于收益。
+
+         ## 真正把那条黑带消掉的是底下那两行 `windowTranslucent*`
+
+         上面那几个「颜色设成透明」的属性**不够**，这一点是真机上量出来的：
+         两个颜色都写了 transparent，底部那条 44 物理像素仍然是纯黑。
+
+         黑的是 SystemUI 画的导航栏，而它画不画、画成什么样，取决于窗口有没有
+         `FLAG_TRANSLUCENT_STATUS` / `FLAG_TRANSLUCENT_NAVIGATION` 这两个**标志**
+         （`WindowManager.LayoutParams` 里的，不是颜色）。拿系统「设置」应用做
+         对照量过一次：它的窗口 `fl=` 里两个标志都在，底部一直铺到第 2400 行、
+         没有黑带；本应用两个都没有。
+
+         这两个标志在 Android 14 上只有一条来路 —— `PhoneWindow.generateLayout()`
+         读主题里的 `windowTranslucentStatus` / `windowTranslucentNavigation`
+         （AOSP `PhoneWindow.java` 2453–2463 行）：
+
+             if (a.getBoolean(R.styleable.Window_windowTranslucentNavigation, false)) {
+                 setFlags(FLAG_TRANSLUCENT_NAVIGATION, ...);
+             }
+
+         所以这两行不是「顺手写的兼容老写法」，而是**唯一**能让系统把导航栏
+         交给应用自己画的开关。名字里的 translucent 是历史包袱（API 19 那会儿
+         确实是半透明的意思），在今天的边到边模型里它就是「这根栏归我画」。 -->
+    <style name="VitalWindow" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <!-- 横屏时前摄挖孔落在左边（94px 宽），不写这行窗口就不铺进去，
+             系统拿黑色填那条 —— 练习页的相机画面左边会缺一条。
+             API 27+ 的属性，24–26 静默忽略，同上。 -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+
+    <!-- 进程启动时套在 Android 窗口上的主题。`windowBackground` 就是 Flutter
+         画出第一帧之前屏幕上那层东西，内容见 drawable/launch_background.xml。
+         「Flutter 画完第一帧自动换掉」这句是这套机制的关键：下面那个
+         NormalTheme 会在这之后接上。 -->
+    <style name="LaunchTheme" parent="VitalWindow">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+    </style>
+
+    <!-- 进程起来之后、Flutter UI 初始化期间套的主题，也是它**背后**那层
+         （Flutter 的 `MaterialApp` 自己会画背景，正常情况下看不见它；
+         看得见的时候是「Flutter 已经接手但还没画出东西」的那一两帧）。
+
+         这里同样写死白色而不是 `?android:colorBackground`：理由与删掉
+         values-night 是同一条 —— 应用是浅色的，窗口就该是浅色的。 -->
+    <style name="NormalTheme" parent="VitalWindow">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+</resources>

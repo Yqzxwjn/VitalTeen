@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node", "vite/client"],
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // 这两条比 strict 更严，刻意开启：
+    // noUncheckedIndexedAccess —— 数组下标访问返回 T | undefined。
+    //   本项目的图表数据全是数组，忘记判空会把 undefined 画到图上，
+    //   而 ECharts 遇到 undefined 通常是静默画一段缺口，不报错。
+    // exactOptionalPropertyTypes —— 区分「没有这个字段」与「字段是 undefined」。
+    //   数据契约里这两者含义不同，混起来会让「缺失」被当成「显式为 undefined」。
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts", "env.d.ts"]
+}

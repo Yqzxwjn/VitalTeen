@@ -1,0 +1,63 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 相机：本应用的核心功能就是取帧做姿态分析。 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 震动：探针压测的提示音走它（`MainActivity.kt` 的 `vibrate()`）。
+         属于 normal 权限、装完就有，但少了它 `Vibrator.vibrate()` 会抛
+         SecurityException，而那是运行时才发现的。 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 决策服务。隐私边界是「只传特征 JSON、不传视频」，不是「不联网」。
+
+         debug / profile 的清单本来就有这一条（Flutter 模板给热重载用的），
+         所以「debug 通、release 不通」是个真陷阱：只在 debug 上验过就发货，
+         到现场就是一句「连不上决策服务」。 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 明文 HTTP：决策服务跑在笔记本上、由 `adb reverse` 转发到手机，没有 TLS。
+         Android 9 起默认禁止明文流量，被拦的表现是连接直接失败 —— 和「服务没起」
+         长得一模一样，排查时很容易走错方向。 -->
+    <!-- 桌面图标下面那一行字。模板默认写的是包名 `vitalteen_app`，那是
+         `flutter create` 的标识符、不是给人看的名字，而它是装完第一眼看到的东西。 -->
+    <application
+        android:label="健知行绎"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:networkSecurityConfig="@xml/network_security_config">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- 别删：GeneratedPluginRegistrant.java 靠它生成 -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+
+        <!-- 语音引擎（`MainActivity.kt` 的 `vitalteen/speech` 通道）。少了这一条，
+             Android 11+ 上 `TextToSpeech` 一构造就失败 —— 包可见性限制让它查不到
+             任何服务，失败方式是静默不出声，排查时一路怀疑引擎没装。 -->
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE"/>
+        </intent>
+    </queries>
+</manifest>

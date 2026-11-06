@@ -1,0 +1,45 @@
+name: vitalteen_app
+description: "VitalTeen：青少年姿态动作规范性判定"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # 没有 cupertino_icons：全应用一处都没用过它，而它的字体有 252KB ——
+  # 留在依赖里就是白打进包（模板默认带的那一行，2026-10-06 去掉）。
+  google_mlkit_pose_detection: ^0.16.1
+  camera: ^0.12.1
+  # 显式依赖而不是让 camera 自己带：platform/video_rotation.dart 逐字镜像了它的
+  # 旋转公式（DeviceOrientationManager.getVideoOrientation），升级时两边要一起看。
+  camera_android: ^0.10.12
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  # 前四份由 scripts/sync_assets.py 从 shared/ 同步而来，**不要手工编辑** ——
+  # 下次同步会覆盖。两边漂移不会报错，只会让同一个动作在手机上和服务端得出
+  # 不同的结论。`python scripts/check_all.py` 里的「端侧 · 资产同步」校验这件事。
+  #
+  # thresholds  判定阈值，真源 shared/thresholds/
+  # plans       决策响应里的 plan_id 变成正文，真源 server/app/plans.py
+  # messages    决策响应里的 template_id 变成句子，真源 shared/messages/
+  # decision    连不上服务时本机复现判定用的常量，真源 server/app/service.py
+  #
+  # images/ 反过来：它没有真源、不参与同步，就是应用自己的美术资源。
+  # 来历与替换方式见 docs/brand-assets.md。
+  assets:
+    - assets/thresholds/
+    - assets/plans/
+    - assets/messages/
+    - assets/decision/
+    - assets/images/
