@@ -17,6 +17,8 @@ app/.flutter-plugins
 app/.flutter-plugins-dependencies
 app/build/
 app/.packages
+# golden 测试失败时 flutter 会把差异图落到 failures/，属于本地产物
+app/test/**/failures/
 
 # 刻意【不】忽略 app/pubspec.lock：
 # pubspec.lock 对**应用**（而非库）应当提交 —— 它锁定每个依赖的确切版本，
